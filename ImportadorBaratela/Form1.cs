@@ -18,6 +18,7 @@ namespace ImportadorBaratela
         }
         private void btnImportarArquivoCSV_Click(object sender, EventArgs e)
         {
+            lblQtdLinhas.Text = "---";
             string caminhoArquivo = string.Empty;
 
             using (OpenFileDialog ofd = new OpenFileDialog())
@@ -71,6 +72,7 @@ namespace ImportadorBaratela
             if (dtProduto.Rows.Count > 0)
             {
                 dgProduto.DataSource = dtProduto;
+                lblQtdLinhas.Text = dgProduto.Rows.Count.ToString();
                 return true;
             }
             else

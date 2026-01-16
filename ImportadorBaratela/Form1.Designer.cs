@@ -31,6 +31,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnImportarArquivoCSV = new System.Windows.Forms.Button();
             this.dgProduto = new System.Windows.Forms.DataGridView();
+            this.lblQtdLinhas = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgProduto)).BeginInit();
             this.SuspendLayout();
             // 
@@ -58,11 +59,21 @@
             this.dgProduto.Size = new System.Drawing.Size(1320, 614);
             this.dgProduto.TabIndex = 1;
             // 
+            // lblQtdLinhas
+            // 
+            this.lblQtdLinhas.AutoSize = true;
+            this.lblQtdLinhas.Location = new System.Drawing.Point(1297, 87);
+            this.lblQtdLinhas.Name = "lblQtdLinhas";
+            this.lblQtdLinhas.Size = new System.Drawing.Size(16, 13);
+            this.lblQtdLinhas.TabIndex = 2;
+            this.lblQtdLinhas.Text = "---";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1344, 729);
+            this.Controls.Add(this.lblQtdLinhas);
             this.Controls.Add(this.dgProduto);
             this.Controls.Add(this.btnImportarArquivoCSV);
             this.Name = "Form1";
@@ -70,6 +81,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgProduto)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -77,6 +89,7 @@
 
         private System.Windows.Forms.Button btnImportarArquivoCSV;
         private System.Windows.Forms.DataGridView dgProduto;
+        private System.Windows.Forms.Label lblQtdLinhas;
     }
 }
 

@@ -1,6 +1,6 @@
-﻿namespace ImportadorBaratela
+﻿namespace ImportadorBaratela.Formularios
 {
-    partial class Form1
+    partial class FormPrincipal
     {
         /// <summary>
         /// Required designer variable.

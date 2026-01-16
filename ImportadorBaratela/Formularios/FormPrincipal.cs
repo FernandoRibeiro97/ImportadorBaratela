@@ -3,11 +3,11 @@ using System.Data;
 using System.IO;
 using System.Windows.Forms;
 
-namespace ImportadorBaratela
+namespace ImportadorBaratela.Formularios
 {
-    public partial class Form1 : Form
+    public partial class FormPrincipal : Form
     {
-        public Form1()
+        public FormPrincipal()
         {
             InitializeComponent();
         }
@@ -28,7 +28,10 @@ namespace ImportadorBaratela
                 if (ofd.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(ofd.FileName))
                     caminhoArquivo = ofd.FileName;
                 else
+                {
                     MessageBox.Show("Nenhum arquivo selecionado");
+                    return;
+                }
             }
 
             if (File.Exists(caminhoArquivo))

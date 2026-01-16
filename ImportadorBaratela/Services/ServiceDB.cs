@@ -22,7 +22,7 @@ namespace ImportadorBaratela.Services
         {
             ExecutarComando("TRUNCATE produto;", CommandType.Text, "TRUNCATE produto");
 
-            string comando = @"INSERT INTO db_imperium.produto(idproduto, Descricao, DescrRed, EmbEntra, EmbSaida, UnidEntra, UnidSaida, Obs, Validade, idGrupo, idSubGrupo, idSubGrupo1, idSituacao, DtCadastro, PesoVariavel, Etiqueta, Ean, ClassFiscal, cest, Vasilhame, Tipo) 
+            string comando = @"INSERT INTO produto(idproduto, Descricao, DescrRed, EmbEntra, EmbSaida, UnidEntra, UnidSaida, Obs, Validade, idGrupo, idSubGrupo, idSubGrupo1, idSituacao, DtCadastro, PesoVariavel, Etiqueta, Ean, ClassFiscal, cest, Vasilhame, Tipo) 
               VALUES ";
 
             StringBuilder stringBuilder = new StringBuilder(comando);
@@ -37,6 +37,27 @@ namespace ImportadorBaratela.Services
             string comandoFinal = str.Substring(0, str.Length - 3).ToString() + ";";
 
             ExecutarComando(comandoFinal, CommandType.Text, "produto");
+        }
+
+        public void InserirTabelaPreco(List<ProdutoPreco> precos)
+        {
+            ExecutarComando("TRUNCATE produto_preco", CommandType.Text, "TRUNCATE produto_preco");
+
+            string comando = @"INSERT INTO produto_preco(IDPRODUTO, ID_LOJA, CUSTO, CUSTO_MEDIO, VENDA1, VENDA2, DTINICIOPROMO, DTFINALPROMO, MARGEM, IDFAMILIA)
+            VALUES ";
+
+            StringBuilder stringBuilder = new StringBuilder(comando);
+
+            foreach (ProdutoPreco p in precos)
+            {
+                stringBuilder.AppendLine(HelperProduto.RetornaLinhaInserirPreco(p) + ",");
+            }
+
+            string str = stringBuilder.ToString();
+
+            string comandoFinal = str.Substring(0, str.Length - 3).ToString() + ";";
+
+            ExecutarComando(comandoFinal, CommandType.Text, "insert produto_preco");
         }
 
         private int ExecutarComando(string strComando, CommandType type, string msgComando)

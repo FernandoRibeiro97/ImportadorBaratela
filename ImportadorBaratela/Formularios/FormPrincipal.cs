@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace ImportadorBaratela.Formularios
@@ -173,6 +174,7 @@ namespace ImportadorBaratela.Formularios
                 }
 
                 serviceDB.InserirTabelaProduto(lstTabelaProduto);
+                serviceDB.InserirTabelaPreco(lstTabelaPreco);
                 MessageBox.Show("Operação finalizada");
             }
         }
@@ -197,7 +199,38 @@ namespace ImportadorBaratela.Formularios
             produto.TbProduto.Cest = "";
             produto.TbProduto.Tipo = r.Cells[3].Value.ToString() == "KG" ? "P" : "U";
 
+            produto.TbPreco.IdProduto = produto.TbProduto.IdProduto;
+            produto.TbPreco.IdLoja = 1;
+            produto.TbPreco.Custo = Convert.ToDecimal(r.Cells[4].Value);
+            produto.TbPreco.Venda1 = Convert.ToDecimal(r.Cells[6].Value);
+
             return produto;
+        }
+        string RetornaDescricaoFormatada(string descricao)
+        {
+            descricao = descricao.Replace("Á", "A");
+            descricao = descricao.Replace("À", "A");
+            descricao = descricao.Replace("Â", "A");
+            descricao = descricao.Replace("Ã", "A");
+
+            descricao = descricao.Replace("É", "E");
+            descricao = descricao.Replace("È", "E");
+            descricao = descricao.Replace("Ê", "E");
+
+            descricao = descricao.Replace("Í", "I");
+            descricao = descricao.Replace("Ì", "I");
+
+            descricao = descricao.Replace("Ó", "O");
+            descricao = descricao.Replace("Ò", "O");
+            descricao = descricao.Replace("Ô", "O");
+            descricao = descricao.Replace("Õ", "O");
+
+            descricao = descricao.Replace("Ú", "U");
+            descricao = descricao.Replace("Ù", "U");
+
+            descricao = descricao.Replace("Ç", "C");
+
+            return descricao;
         }
     }
 }

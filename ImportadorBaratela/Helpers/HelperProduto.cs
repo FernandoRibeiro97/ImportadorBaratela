@@ -33,6 +33,23 @@ namespace ImportadorBaratela.Helpers
             sb.Append(")");
             return sb.ToString();
         }
+        public static string RetornaLinhaInserirPreco(ProdutoPreco p)
+        {
+            StringBuilder sb = new StringBuilder("(");
+            sb.Append($"{p.IdProduto},");
+            sb.Append($"{p.IdLoja},");
+            sb.Append($"{FormatarCampoDecimal(p.Custo.ToString())},");
+            sb.Append($"{FormatarCampoDecimal(p.CustoMedio.ToString())},");
+            sb.Append($"{FormatarCampoDecimal(p.Venda1.ToString())},");
+            sb.Append($"{FormatarCampoDecimal(p.Venda2.ToString())},");
+            sb.Append($"'{p.DtInicioPromo}',");
+            sb.Append($"'{p.DtFinalPromo}',");
+            sb.Append($"{FormatarCampoDecimal(p.Margem.ToString())},");
+            sb.Append($"{p.IdFamilia}");
+
+            sb.Append(")");
+            return sb.ToString();
+        }
         static string FormatarCampoDecimal(string valor)
         {
             return valor.Replace(".", "#").Replace(",", ".").Replace("#", "");

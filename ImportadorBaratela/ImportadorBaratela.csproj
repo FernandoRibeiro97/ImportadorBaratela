@@ -87,11 +87,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Formularios\FormConfigColunas.cs">
+    <Compile Include="Formularios\FormParametros.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\FormConfigColunas.Designer.cs">
-      <DependentUpon>FormConfigColunas.cs</DependentUpon>
+    <Compile Include="Formularios\FormParametros.Designer.cs">
+      <DependentUpon>FormParametros.cs</DependentUpon>
     </Compile>
     <Compile Include="Formularios\FormPrincipal.cs">
       <SubType>Form</SubType>
@@ -99,10 +99,16 @@
     <Compile Include="Formularios\FormPrincipal.Designer.cs">
       <DependentUpon>FormPrincipal.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Config\Coluna.cs" />
+    <Compile Include="Models\Config\Parametros.cs" />
+    <Compile Include="Models\Tabelas\Produto.cs" />
+    <Compile Include="Models\Tabelas\ProdutoEstoque.cs" />
+    <Compile Include="Models\Tabelas\ProdutoPreco.cs" />
+    <Compile Include="Models\Tabelas\ProdutoTributacao.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Formularios\FormConfigColunas.resx">
-      <DependentUpon>FormConfigColunas.cs</DependentUpon>
+    <EmbeddedResource Include="Formularios\FormParametros.resx">
+      <DependentUpon>FormParametros.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\FormPrincipal.resx">
       <DependentUpon>FormPrincipal.cs</DependentUpon>
@@ -131,5 +137,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

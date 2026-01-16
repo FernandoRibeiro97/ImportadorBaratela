@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImportadorBaratela.Models.Config;
+using System;
 using System.Data;
 using System.IO;
 using System.Windows.Forms;
@@ -7,6 +8,7 @@ namespace ImportadorBaratela.Formularios
 {
     public partial class FormPrincipal : Form
     {
+        private Parametros _Parametros;
         public FormPrincipal()
         {
             InitializeComponent();
@@ -76,6 +78,7 @@ namespace ImportadorBaratela.Formularios
             {
                 dgProduto.DataSource = dtProduto;
                 lblQtdLinhas.Text = dgProduto.Rows.Count.ToString();
+                btnInserirBanco.Enabled = dgProduto.Rows.Count > 0;
                 return true;
             }
             else
@@ -120,6 +123,15 @@ namespace ImportadorBaratela.Formularios
             }
 
             return retorno;
+        }
+
+        private void btnParametros_Click(object sender, EventArgs e)
+        {
+            using (FormParametros _form = new FormParametros())
+            {
+                _form.ShowDialog();
+                _Parametros = _form.Parametros;
+            }
         }
     }
 }

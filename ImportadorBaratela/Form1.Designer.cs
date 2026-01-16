@@ -48,7 +48,7 @@
             // 
             // dgProduto
             // 
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.OldLace;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Silver;
             this.dgProduto.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgProduto.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgProduto.Location = new System.Drawing.Point(12, 103);

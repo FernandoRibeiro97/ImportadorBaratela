@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ImportadorBaratela
@@ -106,11 +99,22 @@ namespace ImportadorBaratela
         {
             if (campos.Length == dt.Columns.Count)
             {
-                dt.Rows.Add(campos);
+                dt.Rows.Add(LimparEspacosCampos(campos));
                 return true;
             }
 
             return false;
+        }
+        string[] LimparEspacosCampos(string[] campos)
+        {
+            string[] retorno = new string[campos.Length];
+
+            for (int i = 0; i < campos.Length; i++)
+            {
+                retorno[i] = campos[i].Trim();
+            }
+
+            return retorno;
         }
     }
 }

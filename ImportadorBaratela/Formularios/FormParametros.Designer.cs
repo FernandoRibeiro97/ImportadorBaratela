@@ -85,7 +85,7 @@
             this.groupBox2.Controls.Add(this.dgTributacoes);
             this.groupBox2.Location = new System.Drawing.Point(12, 257);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(1320, 460);
+            this.groupBox2.Size = new System.Drawing.Size(1320, 281);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Condicionais";

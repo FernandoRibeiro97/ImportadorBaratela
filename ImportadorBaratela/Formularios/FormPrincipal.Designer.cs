@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnImportarArquivoCSV = new System.Windows.Forms.Button();
             this.dgProduto = new System.Windows.Forms.DataGridView();
             this.lblQtdLinhas = new System.Windows.Forms.Label();
@@ -52,11 +52,15 @@
             // 
             // dgProduto
             // 
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.Silver;
-            this.dgProduto.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle8;
+            this.dgProduto.AllowUserToAddRows = false;
+            this.dgProduto.AllowUserToDeleteRows = false;
+            this.dgProduto.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Silver;
+            this.dgProduto.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgProduto.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgProduto.Location = new System.Drawing.Point(12, 103);
             this.dgProduto.Name = "dgProduto";
+            this.dgProduto.ReadOnly = true;
             this.dgProduto.RowHeadersVisible = false;
             this.dgProduto.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgProduto.Size = new System.Drawing.Size(1320, 614);
@@ -83,6 +87,7 @@
             this.btnInserirBanco.TabIndex = 3;
             this.btnInserirBanco.Text = "Inserir Banco";
             this.btnInserirBanco.UseVisualStyleBackColor = false;
+            this.btnInserirBanco.Click += new System.EventHandler(this.btnInserirBanco_Click);
             // 
             // btnParametros
             // 

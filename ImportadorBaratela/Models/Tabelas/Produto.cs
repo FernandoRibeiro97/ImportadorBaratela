@@ -16,8 +16,8 @@ namespace ImportadorBaratela.Models.Tabelas
         public int IdGrupo { get; set; }
         public int IdSubGrupo { get; set; }
         public int IdSubGrupo1 { get; set; }
-        public int IdSituacao { get; set; }
-        public DateTime DtCadastro { get; set; } =  DateTime.Now;
+        public int IdSituacao { get; set; } = 1;
+        public string DtCadastro { get; set; } =  DateTime.Now.ToString("yyyy-MM-dd");
         public int PesoVariavel { get; set; }
         public int Etiqueta { get; set; } = 1;
         public string Ean { get; set; }

@@ -99,14 +99,17 @@
     <Compile Include="Formularios\FormPrincipal.Designer.cs">
       <DependentUpon>FormPrincipal.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\HelperProduto.cs" />
     <Compile Include="Models\Config\Coluna.cs" />
     <Compile Include="Models\Config\Parametros.cs" />
     <Compile Include="Models\Tabelas\Produto.cs" />
+    <Compile Include="Models\Tabelas\ProdutoCompleto.cs" />
     <Compile Include="Models\Tabelas\ProdutoEstoque.cs" />
     <Compile Include="Models\Tabelas\ProdutoPreco.cs" />
     <Compile Include="Models\Tabelas\ProdutoTributacao.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ServiceDB.cs" />
     <EmbeddedResource Include="Formularios\FormParametros.resx">
       <DependentUpon>FormParametros.cs</DependentUpon>
     </EmbeddedResource>

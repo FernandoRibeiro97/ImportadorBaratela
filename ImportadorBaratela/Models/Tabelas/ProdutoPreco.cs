@@ -1,6 +1,6 @@
 ﻿namespace ImportadorBaratela.Models.Tabelas
 {
-    internal class ProdutoPreco
+    public class ProdutoPreco
     {
         public int IdProduto { get; set; }
         public int IdLoja { get; set; } = 1;

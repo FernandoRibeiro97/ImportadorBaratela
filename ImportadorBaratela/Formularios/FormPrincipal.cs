@@ -16,6 +16,7 @@ namespace ImportadorBaratela.Formularios
     public partial class FormPrincipal : Form
     {
         private Parametros _Parametros;
+        private MySqlConnection _Conexao;
         public FormPrincipal()
         {
             InitializeComponent();
@@ -23,7 +24,8 @@ namespace ImportadorBaratela.Formularios
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            string strConexao = "Server=localhost;DataBase=db_imperium;UserId=root;Password=root";
+            _Conexao = new MySqlConnection(strConexao);
         }
         private void btnImportarArquivoCSV_Click(object sender, EventArgs e)
         {
@@ -93,6 +95,7 @@ namespace ImportadorBaratela.Formularios
 
             if (dtProduto.Rows.Count > 0)
             {
+                InserirArvoreMercadologica(dtProduto, _Conexao);
                 dgProduto.DataSource = dtProduto;
                 lblQtdLinhas.Text = dgProduto.Rows.Count.ToString();
                 btnInserirBanco.Enabled = dgProduto.Rows.Count > 0;
@@ -153,9 +156,6 @@ namespace ImportadorBaratela.Formularios
 
         private void btnInserirBanco_Click(object sender, EventArgs e)
         {
-            string strConexao = "Server=localhost;DataBase=db_imperium;UserId=root;Password=root";
-            MySqlConnection connection = new MySqlConnection(strConexao);
-
             bool padraoCSV = true;
 
             if (dgProduto.Rows.Count > 0)
@@ -170,7 +170,7 @@ namespace ImportadorBaratela.Formularios
                     }
                 }
 
-                ServiceDB serviceDB = new ServiceDB(connection);
+                ServiceDB serviceDB = new ServiceDB(_Conexao);
 
                 List<Produto> lstTabelaProduto = new List<Produto>();
                 List<ProdutoPreco> lstTabelaPreco = new List<ProdutoPreco>();
@@ -319,6 +319,73 @@ namespace ImportadorBaratela.Formularios
             }
 
             return caminho;
+        }
+        bool InserirArvoreMercadologica(DataTable dtPrincipal, MySqlConnection connection)
+        {
+            List<Grupo> lstGrupo = new List<Grupo>();
+            List<SubGrupo> lstSubGrupo = new List<SubGrupo>();
+            List<SubGrupo1> lstSubGrupo1 = new List<SubGrupo1>();
+
+            if (dtPrincipal.Rows.Count > 0)
+            {
+                if (dtPrincipal.Columns.Contains("SECAO"))
+                {
+                    int contGrupo = 1;
+                    int contSubGrupo = 1;
+                    int contSubGrupo1 = 1;
+                    foreach (DataRow r in dtPrincipal.Rows)
+                    {
+                        Grupo grupo = new Grupo() { Descricao = r["SECAO"].ToString() };
+                        SubGrupo subGrupo = new SubGrupo() { Descricao = r["GRUPO"].ToString() };
+                        SubGrupo1 subGrupo1 = new SubGrupo1() { Descricao = r["SUBGRUPO"].ToString() };
+
+                        if (!lstGrupo.Any(g => g.Descricao == grupo.Descricao))
+                        {
+                            grupo.Id = contGrupo;
+                            contGrupo++;
+                            lstGrupo.Add(grupo);
+                        }
+                        else
+                            grupo.Id = lstGrupo.FirstOrDefault(g => g.Descricao == grupo.Descricao).Id;
+
+                        if (!lstSubGrupo.Any(sb => sb.Descricao == subGrupo.Descricao))
+                        {
+                            subGrupo.Id = contSubGrupo;
+                            subGrupo.IdGrupo = grupo.Id;
+                            contSubGrupo++;
+                            lstSubGrupo.Add(subGrupo);
+                        }
+                        else
+                            subGrupo.Id = lstSubGrupo.FirstOrDefault(sb => sb.Descricao == subGrupo.Descricao).Id;
+
+                        if (!lstSubGrupo1.Any(sb1 => sb1.Descricao == subGrupo1.Descricao))
+                        {
+                            subGrupo1.Id = contSubGrupo1;
+                            subGrupo1.IdGrupo = grupo.Id;
+                            subGrupo1.IdSubGrupo = subGrupo.Id;
+                            contSubGrupo1++;
+                            lstSubGrupo1.Add(subGrupo1);
+                        }
+                        
+                    }
+                }
+            }
+
+            ServiceDB service = new ServiceDB(connection);
+
+            try
+            {
+                service.InserirTabelaGrupo(lstGrupo);
+                service.InserirTabelaSubGrupo(lstSubGrupo);
+                service.InserirTabelaSubGrupo1(lstSubGrupo1);
+
+                return true;
+            }
+            catch
+            {
+                MessageBox.Show("Não foi possível inserir GRUPO/SUBGRUPO/SUBGRUPO1");
+                return false;
+            }
         }
     }
 }

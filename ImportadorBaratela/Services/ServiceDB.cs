@@ -86,6 +86,54 @@ namespace ImportadorBaratela.Services
 
             ExecutarComandoFinal(stringBuilder, "INSERT produto_tributacao");
         }
+        public void InserirTabelaGrupo(List<Grupo> grupos)
+        {
+            ExecutarComando("TRUNCATE grupo;", CommandType.Text, "TRUNCATE grupo");
+
+            string comando = @"INSERT INTO grupo (IDGRUPO, NOME) 
+            VALUES ";
+
+            StringBuilder stringBuilder = new StringBuilder(comando);
+
+            foreach (Grupo g in grupos)
+            {
+                stringBuilder.AppendLine(HelperArvoreMercadologica.RetornarLinhaInserirGrupo(g) + ",");
+            }
+
+            ExecutarComandoFinal(stringBuilder, "INSERT grupo");
+        }
+        public void InserirTabelaSubGrupo(List<SubGrupo> grupos)
+        {
+            ExecutarComando("TRUNCATE subgrupo;", CommandType.Text, "TRUNCATE subgrupo");
+
+            string comando = @"INSERT INTO subgrupo (id, IdSubGrupo, Nome, IdGrupo) 
+            VALUES ";
+
+            StringBuilder stringBuilder = new StringBuilder(comando);
+
+            foreach (SubGrupo s in grupos)
+            {
+                stringBuilder.AppendLine(HelperArvoreMercadologica.RetornarLinhaInserirSubGrupo(s) + ",");
+            }
+
+            ExecutarComandoFinal(stringBuilder, "INSERT subgrupo");
+        }
+        public void InserirTabelaSubGrupo1(List<SubGrupo1> grupos)
+        {
+            ExecutarComando("TRUNCATE subgrupo1;", CommandType.Text, "TRUNCATE subgrupo1");
+
+            string comando = @"INSERT INTO subgrupo1 (id, idsubgrupo1, nome, idgrupo, idsubgrupo) 
+            VALUES ";
+
+            StringBuilder stringBuilder = new StringBuilder(comando);
+
+            foreach (SubGrupo1 s1 in grupos)
+            {
+                stringBuilder.AppendLine(HelperArvoreMercadologica.RetornarLinhaInserirSubGrupo1(s1) + ",");
+            }
+
+            ExecutarComandoFinal(stringBuilder, "INSERT subgrupo1");
+        }
         private int ExecutarComando(string strComando, CommandType type, string msgComando)
         {
             MySqlCommand cmd = new MySqlCommand(strComando, _conexao);

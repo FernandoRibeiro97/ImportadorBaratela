@@ -15,6 +15,11 @@ namespace ImportadorBaratela.Services
 
         public ServiceDB(MySqlConnection conexao)
         {
+            if (conexao.State != ConnectionState.Open)
+            {
+                conexao.Open();
+            }
+
             _conexao = conexao;
         }
 
@@ -133,6 +138,78 @@ namespace ImportadorBaratela.Services
             }
 
             ExecutarComandoFinal(stringBuilder, "INSERT subgrupo1");
+        }
+        public List<Grupo> RetornarGrupos()
+        {
+            string comando = @"SELECT IDGRUPO, NOME FROM grupo;";
+            List<Grupo> lstGrupos = new List<Grupo>();
+
+            try
+            {
+                using (MySqlDataReader rdr = new MySqlCommand(comando, _conexao).ExecuteReader())
+                {
+                    while (rdr.Read())
+                    {
+                        lstGrupos.Add(new Grupo() { Id = Convert.ToInt32(rdr["IDGRUPO"]), Descricao = rdr["NOME"].ToString() });
+                    }
+                }
+
+                return lstGrupos;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Não foi possível recuperar a lista de grupos inseridos");
+                MessageBox.Show(ex.Message);
+                return lstGrupos;
+            }
+        }
+        public List<SubGrupo> RetornarSubGrupos()
+        {
+            string comando = @"SELECT Id, Nome, IdGrupo FROM subgrupo;";
+            List<SubGrupo> lstSubGrupos = new List<SubGrupo>();
+
+            try
+            {
+                using (MySqlDataReader rdr = new MySqlCommand(comando, _conexao).ExecuteReader())
+                {
+                    while (rdr.Read())
+                    {
+                        lstSubGrupos.Add(new SubGrupo() { Id = Convert.ToInt32(rdr["Id"]), Descricao = rdr["Nome"].ToString(), IdGrupo = Convert.ToInt32(rdr["idGrupo"])  });
+                    }
+                }
+
+                return lstSubGrupos;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Não foi possível recuperar a lista de grupos inseridos");
+                MessageBox.Show(ex.Message);
+                return lstSubGrupos;
+            }
+        }
+        public List<SubGrupo1> RetornarSubGrupos1()
+        {
+            string comando = @"SELECT id, nome, idgrupo, idsubgrupo FROM subgrupo1;";
+            List<SubGrupo1> lstSubGrupos1 = new List<SubGrupo1>();
+
+            try
+            {
+                using (MySqlDataReader rdr = new MySqlCommand(comando, _conexao).ExecuteReader())
+                {
+                    while (rdr.Read())
+                    {
+                        lstSubGrupos1.Add(new SubGrupo1() { Id = Convert.ToInt32(rdr["id"]), Descricao = rdr["nome"].ToString(), IdGrupo = Convert.ToInt32(rdr["idgrupo"]), IdSubGrupo = Convert.ToInt32(rdr["idsubgrupo"]) });
+                    }
+                }
+
+                return lstSubGrupos1;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Não foi possível recuperar a lista de grupos inseridos");
+                MessageBox.Show(ex.Message);
+                return lstSubGrupos1;
+            }
         }
         private int ExecutarComando(string strComando, CommandType type, string msgComando)
         {

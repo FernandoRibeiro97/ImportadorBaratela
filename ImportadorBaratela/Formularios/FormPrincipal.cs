@@ -150,6 +150,10 @@ namespace ImportadorBaratela.Formularios
             {
                 _form.ShowDialog();
                 _Parametros = _form.Parametros;
+
+                if (_form.Parametros is null)
+                    return;
+
                 _Conexao = new MySqlConnection($"Server={_Parametros.ServidorMySQL};Database={_Parametros.BancoMySQL};UserId={_Parametros.UsuarioMySQL};Password={_Parametros.SenhaMySQL};");
 
                 try
@@ -174,12 +178,14 @@ namespace ImportadorBaratela.Formularios
             if (dgProduto.Rows.Count > 0)
             {
                 List<ProdutoCompleto> lstProdutos = new List<ProdutoCompleto>();
+                HelperArvoreMercadologica helperArvoreMercadologica = new HelperArvoreMercadologica();
+                helperArvoreMercadologica.PreencherArvoreMercadologicaInserida(_Conexao);
 
                 foreach (DataGridViewRow r in dgProduto.Rows)
                 {
                     if (padraoCSV)
                     {
-                        lstProdutos.Add(RetornarProdutoPorRowPadrao(r));
+                        lstProdutos.Add(RetornarProdutoPorRowPadrao(r, helperArvoreMercadologica));
                     }
                 }
 
@@ -206,7 +212,7 @@ namespace ImportadorBaratela.Formularios
             }
         }
 
-        ProdutoCompleto RetornarProdutoPorRowPadrao(DataGridViewRow r)
+        ProdutoCompleto RetornarProdutoPorRowPadrao(DataGridViewRow r, HelperArvoreMercadologica helperArvoreMercadologica)
         {
             int _loja = 1;
 
@@ -219,9 +225,9 @@ namespace ImportadorBaratela.Formularios
             produto.TbProduto.UnidEntrada = r.Cells[3].Value.ToString();
             produto.TbProduto.UnidSaida = r.Cells[3].Value.ToString();
             produto.TbProduto.Validade = Convert.ToInt32(r.Cells[24].Value);
-            produto.TbProduto.IdGrupo = 0; //TODO: RETORNAR IDGRUPO
-            produto.TbProduto.IdSubGrupo = 0;
-            produto.TbProduto.IdSubGrupo1 = 0;
+            produto.TbProduto.IdGrupo = helperArvoreMercadologica.GruposInseridos.FirstOrDefault(g => g.Descricao == r.Cells[20].Value.ToString()).Id;
+            produto.TbProduto.IdSubGrupo = helperArvoreMercadologica.SubGruposInseridos.FirstOrDefault(sb => sb.Descricao == r.Cells[21].Value.ToString()).Id;
+            produto.TbProduto.IdSubGrupo1 = helperArvoreMercadologica.SubGrupos1Inseridos.FirstOrDefault(sb1 => sb1.Descricao == r.Cells[22].Value.ToString()).Id;
             produto.TbProduto.PesoVariavel = r.Cells[23].Value.ToString() == "S" ? 1 : 0;
             produto.TbProduto.Ean = string.IsNullOrEmpty(r.Cells[1].Value.ToString()) ? produto.TbProduto.IdProduto.ToString() : r.Cells[1].Value.ToString();
             produto.TbProduto.ClassFiscal = string.IsNullOrEmpty(r.Cells[7].Value.ToString()) ? "12345678" : r.Cells[7].Value.ToString();

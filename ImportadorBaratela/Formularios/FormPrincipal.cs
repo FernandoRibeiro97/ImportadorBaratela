@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace ImportadorBaratela.Formularios
@@ -43,6 +44,8 @@ namespace ImportadorBaratela.Formularios
 
             if (File.Exists(caminhoArquivo))
             {
+                caminhoArquivo = RetornarArquivoCodificadoUTF8(caminhoArquivo);
+
                 LerArquivoCSV(File.ReadAllLines(caminhoArquivo));
             }
             else
@@ -231,6 +234,24 @@ namespace ImportadorBaratela.Formularios
             descricao = descricao.Replace("Ç", "C");
 
             return descricao;
+        }
+        string RetornarArquivoCodificadoUTF8(string arquivoOriginal)
+        {
+            string caminho = string.Empty;
+
+            if (File.Exists(arquivoOriginal))
+            {
+                Encoding ansi = Encoding.GetEncoding(1252);
+
+                string conteudoOriginal = File.ReadAllText(arquivoOriginal, ansi);
+
+                caminho = Path.GetTempFileName();
+
+                File.WriteAllText(caminho, conteudoOriginal, Encoding.UTF8);
+            }
+
+
+            return caminho;
         }
     }
 }

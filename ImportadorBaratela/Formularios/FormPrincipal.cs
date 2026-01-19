@@ -186,7 +186,7 @@ namespace ImportadorBaratela.Formularios
         {
             ProdutoCompleto produto = new ProdutoCompleto();
             produto.TbProduto.IdProduto = Convert.ToInt32(r.Cells[0].Value);
-            produto.TbProduto.Descricao = r.Cells[2].Value.ToString().Replace("'", " ").Replace("\\", " ");
+            produto.TbProduto.Descricao = RetornarDescricaoFormatada(r.Cells[2].Value.ToString());
             produto.TbProduto.DescricaoReduzida = produto.TbProduto.Descricao.Length > 24 ? produto.TbProduto.Descricao.Substring(0, 24) : produto.TbProduto.Descricao;
             produto.TbProduto.EmbEntrada = 1.000M;
             produto.TbProduto.EmbSaida = 1.000M;
@@ -232,6 +232,9 @@ namespace ImportadorBaratela.Formularios
             descricao = descricao.Replace("Ù", "U");
 
             descricao = descricao.Replace("Ç", "C");
+
+            descricao = descricao.Replace("\\", "");
+            descricao = descricao.Replace("'", "");
 
             return descricao;
         }

@@ -32,12 +32,27 @@ namespace ImportadorBaratela.Services
 
             StringBuilder stringBuilder = new StringBuilder(comando);
 
+            int contLote = 0;
+
             foreach (Produto p in produtos)
             {
                 stringBuilder.AppendLine(HelperProduto.RetornarLinhaInserirProduto(p) + ",");
+                contLote++;
+
+                if (contLote == 1000)
+                {
+                    ExecutarComandoFinal(stringBuilder, "INSERT produto");
+                    stringBuilder = new StringBuilder(comando);
+                    contLote = 0;
+                }
+                else
+                    continue;
             }
 
-            ExecutarComandoFinal(stringBuilder, "INSERT produto");
+            if (contLote > 0)
+            {
+                ExecutarComandoFinal(stringBuilder, "INSERT produto");
+            }
         }
         public void InserirTabelaPreco(List<ProdutoPreco> precos)
         {
@@ -48,12 +63,27 @@ namespace ImportadorBaratela.Services
 
             StringBuilder stringBuilder = new StringBuilder(comando);
 
+            int contLote = 0;
+
             foreach (ProdutoPreco p in precos)
             {
                 stringBuilder.AppendLine(HelperProduto.RetornarLinhaInserirPreco(p) + ",");
+                contLote++;
+
+                if (contLote == 1000)
+                {
+                    ExecutarComandoFinal(stringBuilder, "INSERT produto_preco");
+                    stringBuilder = new StringBuilder(comando);
+                    contLote = 0;
+                }
+                else
+                    continue;
             }
 
-            ExecutarComandoFinal(stringBuilder, "INSERT produto_preco");
+            if (contLote > 0)
+            {
+                ExecutarComandoFinal(stringBuilder, "INSERT produto_preco");
+            }
         }
         public void InserirTabelaEstoque(List<ProdutoEstoque> estoques)
         {
@@ -64,12 +94,27 @@ namespace ImportadorBaratela.Services
 
             StringBuilder stringBuilder = new StringBuilder(comando);
 
+            int contLote = 0;
+
             foreach (ProdutoEstoque e in estoques)
             {
                 stringBuilder.AppendLine(HelperProduto.RetornarLinhaInserirEstoque(e) + ",");
+                contLote++;
+
+                if (contLote == 1000)
+                {
+                    ExecutarComandoFinal(stringBuilder, "INSERT produto_estoque");
+                    stringBuilder = new StringBuilder(comando);
+                    contLote = 0;
+                }
+                else
+                    continue;
             }
 
-            ExecutarComandoFinal(stringBuilder, "INSERT produto_estoque");
+            if (contLote > 0)
+            {
+                ExecutarComandoFinal(stringBuilder, "INSERT produto_estoque");
+            }
         }
         public void InserirTabelaTributacao(List<ProdutoTributacao> tributacoes)
         {
@@ -84,12 +129,27 @@ namespace ImportadorBaratela.Services
 
             StringBuilder stringBuilder = new StringBuilder(comando);
 
+            int contLote = 0;
+
             foreach (ProdutoTributacao t in tributacoes)
             {
                 stringBuilder.AppendLine(HelperProduto.RetornarLinhaInserirTributacao(t) + ",");
+                contLote++;
+
+                if (contLote == 1000)
+                {
+                    ExecutarComandoFinal(stringBuilder, "INSERT produto_tributacao");
+                    stringBuilder = new StringBuilder(comando);
+                    contLote = 0;
+                }
+                else
+                    continue;
             }
 
-            ExecutarComandoFinal(stringBuilder, "INSERT produto_tributacao");
+            if (contLote > 0)
+            {
+                ExecutarComandoFinal(stringBuilder, "INSERT produto_tributacao");
+            }
         }
         public void InserirTabelaGrupo(List<Grupo> grupos)
         {

@@ -157,7 +157,7 @@ namespace ImportadorBaratela.Formularios
                 {
                     if (padraoCSV)
                     {
-                        lstProdutos.Add(RetornaProdutoPorRowPadrao(r));
+                        lstProdutos.Add(RetornarProdutoPorRowPadrao(r));
                     }
                 }
 
@@ -182,7 +182,7 @@ namespace ImportadorBaratela.Formularios
             }
         }
 
-        ProdutoCompleto RetornaProdutoPorRowPadrao(DataGridViewRow r)
+        ProdutoCompleto RetornarProdutoPorRowPadrao(DataGridViewRow r)
         {
             ProdutoCompleto produto = new ProdutoCompleto();
             produto.TbProduto.IdProduto = Convert.ToInt32(r.Cells[0].Value);
@@ -209,7 +209,7 @@ namespace ImportadorBaratela.Formularios
 
             return produto;
         }
-        string RetornaDescricaoFormatada(string descricao)
+        string RetornarDescricaoFormatada(string descricao)
         {
             descricao = descricao.Replace("Á", "A");
             descricao = descricao.Replace("À", "A");

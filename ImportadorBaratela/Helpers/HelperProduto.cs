@@ -5,7 +5,7 @@ namespace ImportadorBaratela.Helpers
 {
     public static class HelperProduto
     {
-        public static string RetornaLinhaInserirProduto(Produto p)
+        public static string RetornarLinhaInserirProduto(Produto p)
         {
             StringBuilder sb = new StringBuilder("(");
             sb.Append($"{p.IdProduto},");
@@ -33,7 +33,7 @@ namespace ImportadorBaratela.Helpers
             sb.Append(")");
             return sb.ToString();
         }
-        public static string RetornaLinhaInserirPreco(ProdutoPreco p)
+        public static string RetornarLinhaInserirPreco(ProdutoPreco p)
         {
             StringBuilder sb = new StringBuilder("(");
             sb.Append($"{p.IdProduto},");

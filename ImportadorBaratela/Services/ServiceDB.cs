@@ -29,7 +29,7 @@ namespace ImportadorBaratela.Services
 
             foreach (Produto p in produtos)
             {
-                stringBuilder.AppendLine(HelperProduto.RetornaLinhaInserirProduto(p) + ",");
+                stringBuilder.AppendLine(HelperProduto.RetornarLinhaInserirProduto(p) + ",");
             }
 
             string str = stringBuilder.ToString();
@@ -50,7 +50,7 @@ namespace ImportadorBaratela.Services
 
             foreach (ProdutoPreco p in precos)
             {
-                stringBuilder.AppendLine(HelperProduto.RetornaLinhaInserirPreco(p) + ",");
+                stringBuilder.AppendLine(HelperProduto.RetornarLinhaInserirPreco(p) + ",");
             }
 
             string str = stringBuilder.ToString();

@@ -9,7 +9,7 @@ namespace ImportadorBaratela.Formularios
         public Parametros Parametros;
         public FormParametros()
         {
-            Parametros = new Parametros();
+            Parametros Parametros;
             InitializeComponent();
         }
 
@@ -25,7 +25,14 @@ namespace ImportadorBaratela.Formularios
 
         void SalvarParametros()
         {
-            Parametros.EanVazioInsereId = ckbEanVazioInsereId.Checked;
+            Parametros = new Parametros
+            {
+                EanVazioInsereId = ckbEanVazioInsereId.Checked,
+                ServidorMySQL = txtServidorMySQL.Text,
+                BancoMySQL = txtBancoMySQL.Text,
+                UsuarioMySQL = txtUsuarioMySQL.Text,
+                SenhaMySQL = txtSenhaMySQL.Text
+            };
         }
 
         private void FormParametros_FormClosing(object sender, FormClosingEventArgs e)

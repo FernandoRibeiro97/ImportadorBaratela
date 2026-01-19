@@ -32,14 +32,22 @@
             this.btnSalvar = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.dgTributacoes = new System.Windows.Forms.DataGridView();
             this.lblDgTributacoes = new System.Windows.Forms.Label();
+            this.dgTributacoes = new System.Windows.Forms.DataGridView();
             this.valorCSV = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.sittrib = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.valor = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.codPDV = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.aliquota = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.reducao = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtServidorMySQL = new System.Windows.Forms.TextBox();
+            this.txtBancoMySQL = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtUsuarioMySQL = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtSenhaMySQL = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgTributacoes)).BeginInit();
@@ -72,7 +80,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.ckbEanVazioInsereId);
-            this.groupBox1.Location = new System.Drawing.Point(12, 67);
+            this.groupBox1.Location = new System.Drawing.Point(12, 127);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(1320, 184);
             this.groupBox1.TabIndex = 2;
@@ -83,12 +91,23 @@
             // 
             this.groupBox2.Controls.Add(this.lblDgTributacoes);
             this.groupBox2.Controls.Add(this.dgTributacoes);
-            this.groupBox2.Location = new System.Drawing.Point(12, 257);
+            this.groupBox2.Enabled = false;
+            this.groupBox2.Location = new System.Drawing.Point(12, 326);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(1320, 281);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Condicionais";
+            this.groupBox2.Visible = false;
+            // 
+            // lblDgTributacoes
+            // 
+            this.lblDgTributacoes.AutoSize = true;
+            this.lblDgTributacoes.Location = new System.Drawing.Point(3, 28);
+            this.lblDgTributacoes.Name = "lblDgTributacoes";
+            this.lblDgTributacoes.Size = new System.Drawing.Size(162, 13);
+            this.lblDgTributacoes.TabIndex = 1;
+            this.lblDgTributacoes.Text = "Adicione ou edite as Tributações";
             // 
             // dgTributacoes
             // 
@@ -104,15 +123,6 @@
             this.dgTributacoes.Name = "dgTributacoes";
             this.dgTributacoes.Size = new System.Drawing.Size(643, 131);
             this.dgTributacoes.TabIndex = 0;
-            // 
-            // lblDgTributacoes
-            // 
-            this.lblDgTributacoes.AutoSize = true;
-            this.lblDgTributacoes.Location = new System.Drawing.Point(3, 28);
-            this.lblDgTributacoes.Name = "lblDgTributacoes";
-            this.lblDgTributacoes.Size = new System.Drawing.Size(162, 13);
-            this.lblDgTributacoes.TabIndex = 1;
-            this.lblDgTributacoes.Text = "Adicione ou edite as Tributações";
             // 
             // valorCSV
             // 
@@ -144,11 +154,87 @@
             this.reducao.HeaderText = "Redução";
             this.reducao.Name = "reducao";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(16, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(84, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Servidor MySQL";
+            // 
+            // txtServidorMySQL
+            // 
+            this.txtServidorMySQL.Location = new System.Drawing.Point(106, 12);
+            this.txtServidorMySQL.Name = "txtServidorMySQL";
+            this.txtServidorMySQL.Size = new System.Drawing.Size(244, 20);
+            this.txtServidorMySQL.TabIndex = 5;
+            this.txtServidorMySQL.Text = "localhost";
+            // 
+            // txtBancoMySQL
+            // 
+            this.txtBancoMySQL.Location = new System.Drawing.Point(106, 38);
+            this.txtBancoMySQL.Name = "txtBancoMySQL";
+            this.txtBancoMySQL.Size = new System.Drawing.Size(244, 20);
+            this.txtBancoMySQL.TabIndex = 7;
+            this.txtBancoMySQL.Text = "db_imperium";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(24, 41);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(76, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Banco MySQL";
+            // 
+            // txtUsuarioMySQL
+            // 
+            this.txtUsuarioMySQL.Location = new System.Drawing.Point(106, 64);
+            this.txtUsuarioMySQL.Name = "txtUsuarioMySQL";
+            this.txtUsuarioMySQL.Size = new System.Drawing.Size(244, 20);
+            this.txtUsuarioMySQL.TabIndex = 9;
+            this.txtUsuarioMySQL.Text = "root";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(19, 67);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(81, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Usuário MySQL";
+            // 
+            // txtSenhaMySQL
+            // 
+            this.txtSenhaMySQL.Location = new System.Drawing.Point(106, 90);
+            this.txtSenhaMySQL.Name = "txtSenhaMySQL";
+            this.txtSenhaMySQL.Size = new System.Drawing.Size(244, 20);
+            this.txtSenhaMySQL.TabIndex = 11;
+            this.txtSenhaMySQL.Text = "root";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(24, 93);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(76, 13);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Senha MySQL";
+            // 
             // FormParametros
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1344, 729);
+            this.Controls.Add(this.txtSenhaMySQL);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.txtUsuarioMySQL);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.txtBancoMySQL);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.txtServidorMySQL);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnSalvar);
@@ -163,6 +249,7 @@
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgTributacoes)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -180,5 +267,13 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn codPDV;
         private System.Windows.Forms.DataGridViewTextBoxColumn aliquota;
         private System.Windows.Forms.DataGridViewTextBoxColumn reducao;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtServidorMySQL;
+        private System.Windows.Forms.TextBox txtBancoMySQL;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox txtUsuarioMySQL;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtSenhaMySQL;
+        private System.Windows.Forms.Label label4;
     }
 }

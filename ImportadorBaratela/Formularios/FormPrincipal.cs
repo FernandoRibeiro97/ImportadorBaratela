@@ -24,8 +24,7 @@ namespace ImportadorBaratela.Formularios
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string strConexao = "Server=localhost;DataBase=db_imperium;UserId=root;Password=root";
-            _Conexao = new MySqlConnection(strConexao);
+            btnParametros.PerformClick();
         }
         private void btnImportarArquivoCSV_Click(object sender, EventArgs e)
         {
@@ -151,6 +150,20 @@ namespace ImportadorBaratela.Formularios
             {
                 _form.ShowDialog();
                 _Parametros = _form.Parametros;
+                _Conexao = new MySqlConnection($"Server={_Parametros.ServidorMySQL};Database={_Parametros.BancoMySQL};UserId={_Parametros.UsuarioMySQL};Password={_Parametros.SenhaMySQL};");
+
+                try
+                {
+                    if (_Conexao.State != ConnectionState.Open)
+                    {
+                        _Conexao.Open();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Não foi possível se conectar com o banco de dados");
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
 

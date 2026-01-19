@@ -32,13 +32,8 @@ namespace ImportadorBaratela.Services
                 stringBuilder.AppendLine(HelperProduto.RetornarLinhaInserirProduto(p) + ",");
             }
 
-            string str = stringBuilder.ToString();
-
-            string comandoFinal = str.Substring(0, str.Length - 3).ToString() + ";";
-
-            ExecutarComando(comandoFinal, CommandType.Text, "produto");
+            MontarComandoFinal(stringBuilder, "insert produto");
         }
-
         public void InserirTabelaPreco(List<ProdutoPreco> precos)
         {
             ExecutarComando("TRUNCATE produto_preco", CommandType.Text, "TRUNCATE produto_preco");
@@ -53,13 +48,24 @@ namespace ImportadorBaratela.Services
                 stringBuilder.AppendLine(HelperProduto.RetornarLinhaInserirPreco(p) + ",");
             }
 
-            string str = stringBuilder.ToString();
-
-            string comandoFinal = str.Substring(0, str.Length - 3).ToString() + ";";
-
-            ExecutarComando(comandoFinal, CommandType.Text, "insert produto_preco");
+            MontarComandoFinal(stringBuilder, "insert produto_preco");
         }
+        public void InserirTabelaEstoque(List<ProdutoEstoque> estoques)
+        {
+            ExecutarComando("TRUNCATE produto_estoque", CommandType.Text, "TRUNCATE produto_estoque");
 
+            string comando = @"INSERT INTO produto_estoque(idproduto, id_loja, estoque_atual, estoque_minimo) 
+            VALUES ";
+
+            StringBuilder stringBuilder = new StringBuilder(comando);
+
+            foreach (ProdutoEstoque e in estoques)
+            {
+                stringBuilder.AppendLine(HelperProduto.RetornarLinhaInserirEstoque(e) + ",");
+            }
+
+            MontarComandoFinal(stringBuilder, "insert produto_estoque");
+        }
         private int ExecutarComando(string strComando, CommandType type, string msgComando)
         {
             MySqlCommand cmd = new MySqlCommand(strComando, _conexao);
@@ -84,6 +90,14 @@ namespace ImportadorBaratela.Services
             }
 
 
+        }
+        private void MontarComandoFinal(StringBuilder stringBuilder, string msgComando)
+        {
+            string str = stringBuilder.ToString();
+
+            string comandoFinal = str.Substring(0, str.Length - 3).ToString() + ";";
+
+            ExecutarComando(comandoFinal, CommandType.Text, $"{msgComando}");
         }
     }
 }

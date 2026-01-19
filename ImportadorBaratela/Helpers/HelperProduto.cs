@@ -50,6 +50,16 @@ namespace ImportadorBaratela.Helpers
             sb.Append(")");
             return sb.ToString();
         }
+        public static string RetornarLinhaInserirEstoque(ProdutoEstoque e)
+        {
+            StringBuilder sb = new StringBuilder("(");
+            sb.Append($"{e.IdProduto},");
+            sb.Append($"{e.IdLoja},");
+            sb.Append($"{FormatarCampoDecimal(e.EstoqueAtual.ToString())},");
+            sb.Append($"{FormatarCampoDecimal(e.EstoqueMinimo.ToString())}");
+            sb.Append(")");
+            return sb.ToString();
+        }
         static string FormatarCampoDecimal(string valor)
         {
             return valor.Replace(".", "#").Replace(",", ".").Replace("#", "");

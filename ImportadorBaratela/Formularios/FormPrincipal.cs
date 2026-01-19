@@ -178,12 +178,15 @@ namespace ImportadorBaratela.Formularios
 
                 serviceDB.InserirTabelaProduto(lstTabelaProduto);
                 serviceDB.InserirTabelaPreco(lstTabelaPreco);
+                serviceDB.InserirTabelaEstoque(lstTabelaEstoque);
                 MessageBox.Show("Operação finalizada");
             }
         }
 
         ProdutoCompleto RetornarProdutoPorRowPadrao(DataGridViewRow r)
         {
+            int _loja = 1;
+
             ProdutoCompleto produto = new ProdutoCompleto();
             produto.TbProduto.IdProduto = Convert.ToInt32(r.Cells[0].Value);
             produto.TbProduto.Descricao = RetornarDescricaoFormatada(r.Cells[2].Value.ToString());
@@ -203,9 +206,14 @@ namespace ImportadorBaratela.Formularios
             produto.TbProduto.Tipo = r.Cells[3].Value.ToString() == "KG" ? "P" : "U";
 
             produto.TbPreco.IdProduto = produto.TbProduto.IdProduto;
-            produto.TbPreco.IdLoja = 1;
+            produto.TbPreco.IdLoja = _loja;
             produto.TbPreco.Custo = Convert.ToDecimal(r.Cells[4].Value);
             produto.TbPreco.Venda1 = Convert.ToDecimal(r.Cells[6].Value);
+
+            produto.TbEstoque.IdProduto = produto.TbProduto.IdProduto;
+            produto.TbEstoque.IdLoja = _loja;
+            produto.TbEstoque.EstoqueAtual = 0M;
+            produto.TbEstoque.EstoqueMinimo = 0M;
 
             return produto;
         }

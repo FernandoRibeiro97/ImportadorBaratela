@@ -1,4 +1,5 @@
-﻿using ImportadorBaratela.Models.Config;
+﻿using ImportadorBaratela.Helpers;
+using ImportadorBaratela.Models.Config;
 using ImportadorBaratela.Models.Tabelas;
 using ImportadorBaratela.Services;
 using MySql.Data.MySqlClient;
@@ -46,7 +47,15 @@ namespace ImportadorBaratela.Formularios
             {
                 caminhoArquivo = RetornarArquivoCodificadoUTF8(caminhoArquivo);
 
-                LerArquivoCSV(File.ReadAllLines(caminhoArquivo));
+                if (File.Exists(caminhoArquivo))
+                {
+                    LerArquivoCSV(File.ReadAllLines(caminhoArquivo));
+                }
+                else
+                {
+                    MessageBox.Show("Não foi possível converter o arquivo para UTF-8");
+                    return;
+                }
             }
             else
             {
@@ -179,6 +188,7 @@ namespace ImportadorBaratela.Formularios
                 serviceDB.InserirTabelaProduto(lstTabelaProduto);
                 serviceDB.InserirTabelaPreco(lstTabelaPreco);
                 serviceDB.InserirTabelaEstoque(lstTabelaEstoque);
+                serviceDB.InserirTabelaTributacao(lstTabelaTributacao);
                 MessageBox.Show("Operação finalizada");
             }
         }
@@ -215,6 +225,45 @@ namespace ImportadorBaratela.Formularios
             produto.TbEstoque.EstoqueAtual = 0M;
             produto.TbEstoque.EstoqueMinimo = 0M;
 
+
+            string natFiscal = r.Cells[13].Value.ToString();
+            decimal aliqEntrada = Convert.ToDecimal(r.Cells[8].Value.ToString());
+            decimal aliqSaida = Convert.ToDecimal(r.Cells[10].Value);
+            produto.TbTributacao.IdProduto = produto.TbProduto.IdProduto;
+            produto.TbTributacao.IdLoja = _loja;
+            produto.TbTributacao.OrigemProduto = "0 - NACIONAL";
+            produto.TbTributacao.TipoProd = "00 - MERCADORIA PARA REVENDA";
+            produto.TbTributacao.SitTribCompra = HelperProduto.RetornarSitTrib(natFiscal);
+            produto.TbTributacao.IcmsCompra = HelperProduto.ValidarAliq(aliqEntrada);
+            produto.TbTributacao.RedBase = 0M;
+            produto.TbTributacao.TabIcmsProdEntrada = HelperProduto.RetornarTabIcms(aliqEntrada);
+            produto.TbTributacao.SitTrib = HelperProduto.RetornarSitTrib(natFiscal);
+            produto.TbTributacao.Icms = HelperProduto.ValidarAliq(aliqSaida);
+            produto.TbTributacao.RedBaseVenda = 0M;
+            produto.TbTributacao.TabIcmsProd = HelperProduto.RetornarTabIcms(aliqSaida);
+            produto.TbTributacao.CodTrib = HelperProduto.RetornarCodTrib(natFiscal == "I" ? -1 : aliqSaida);
+            produto.TbTributacao.Ipi = 0M;
+            produto.TbTributacao.Iva = 0M;
+
+            string _pisCofins = r.Cells[14].Value.ToString();
+            produto.TbTributacao.TipoPisCofins = _pisCofins == "A" ? "I" : _pisCofins;
+            produto.TbTributacao.CstPis = HelperProduto.RetornarCstPisEntrada(_pisCofins);
+            produto.TbTributacao.CstPisSaida = HelperProduto.RetornarCstPisSaida(_pisCofins);
+            produto.TbTributacao.CcsApurada = "02 - Contribuição não-cumulativa apurada a alíquotas diferenciadas";
+            produto.TbTributacao.CargaTributariaFederal = 0M;
+            produto.TbTributacao.CargaTributaria = 0M;
+            produto.TbTributacao.ChaveNCM = "M2L5P8";
+            produto.TbTributacao.CstIpiSaida = "";
+            produto.TbTributacao.CstIpiEntrada = "";
+            produto.TbTributacao.TipoIva = "P";
+            produto.TbTributacao.CalculaIvaAjustado = "N";
+            produto.TbTributacao.NatReceita = "";
+            produto.TbTributacao.Fecoep = 0M;
+            produto.TbTributacao.Pis = 0M;
+            produto.TbTributacao.Cofins = 0M;
+            produto.TbTributacao.PisEntrada = 0M;
+            produto.TbTributacao.CofinsEntrada = 0M;
+
             return produto;
         }
         string RetornarDescricaoFormatada(string descricao)
@@ -250,17 +299,24 @@ namespace ImportadorBaratela.Formularios
         {
             string caminho = string.Empty;
 
-            if (File.Exists(arquivoOriginal))
+            try
             {
-                Encoding ansi = Encoding.GetEncoding(1252);
+                if (File.Exists(arquivoOriginal))
+                {
+                    Encoding ansi = Encoding.GetEncoding(1252);
 
-                string conteudoOriginal = File.ReadAllText(arquivoOriginal, ansi);
+                    string conteudoOriginal = File.ReadAllText(arquivoOriginal, ansi);
 
-                caminho = Path.GetTempFileName();
+                    caminho = Path.GetTempFileName();
 
-                File.WriteAllText(caminho, conteudoOriginal, Encoding.UTF8);
+                    File.WriteAllText(caminho, conteudoOriginal, Encoding.UTF8);
+                }
             }
-
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return "";
+            }
 
             return caminho;
         }

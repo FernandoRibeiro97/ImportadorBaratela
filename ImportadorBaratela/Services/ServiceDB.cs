@@ -32,7 +32,7 @@ namespace ImportadorBaratela.Services
                 stringBuilder.AppendLine(HelperProduto.RetornarLinhaInserirProduto(p) + ",");
             }
 
-            MontarComandoFinal(stringBuilder, "insert produto");
+            ExecutarComandoFinal(stringBuilder, "INSERT produto");
         }
         public void InserirTabelaPreco(List<ProdutoPreco> precos)
         {
@@ -48,7 +48,7 @@ namespace ImportadorBaratela.Services
                 stringBuilder.AppendLine(HelperProduto.RetornarLinhaInserirPreco(p) + ",");
             }
 
-            MontarComandoFinal(stringBuilder, "insert produto_preco");
+            ExecutarComandoFinal(stringBuilder, "INSERT produto_preco");
         }
         public void InserirTabelaEstoque(List<ProdutoEstoque> estoques)
         {
@@ -64,7 +64,27 @@ namespace ImportadorBaratela.Services
                 stringBuilder.AppendLine(HelperProduto.RetornarLinhaInserirEstoque(e) + ",");
             }
 
-            MontarComandoFinal(stringBuilder, "insert produto_estoque");
+            ExecutarComandoFinal(stringBuilder, "INSERT produto_estoque");
+        }
+        public void InserirTabelaTributacao(List<ProdutoTributacao> tributacoes)
+        {
+            ExecutarComando("TRUNCATE produto_tributacao", CommandType.Text, "TRUNCATE produto_tributacao");
+
+            string comando = @"INSERT INTO produto_tributacao(
+                                idproduto, id_loja, origemprod, tipoprod, sittribcompra, icmscompra, redbase, tabicmsprodentrada, sittrib, icms, redbasevenda, tabicmsprod,
+                                codtrib, ipi, iva, tipopiscofins, cst_pis, cst_pis_saida, ccs_apurada, cargaTributariaFederal, cargaTributaria, chaveNCM, cst_ipi_saida,
+                                cst_ipi_entrada, tipoiva, calculaIvaAjustado, nat_receita, fecoep, pis, cofins, pisentrada, cofinsentrada
+                                )
+                                VALUES ";
+
+            StringBuilder stringBuilder = new StringBuilder(comando);
+
+            foreach (ProdutoTributacao t in tributacoes)
+            {
+                stringBuilder.AppendLine(HelperProduto.RetornarLinhaInserirTributacao(t) + ",");
+            }
+
+            ExecutarComandoFinal(stringBuilder, "INSERT produto_tributacao");
         }
         private int ExecutarComando(string strComando, CommandType type, string msgComando)
         {
@@ -91,7 +111,7 @@ namespace ImportadorBaratela.Services
 
 
         }
-        private void MontarComandoFinal(StringBuilder stringBuilder, string msgComando)
+        private void ExecutarComandoFinal(StringBuilder stringBuilder, string msgComando)
         {
             string str = stringBuilder.ToString();
 

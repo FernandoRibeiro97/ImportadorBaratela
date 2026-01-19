@@ -4,8 +4,8 @@
     {
         public int IdProduto { get; set; }
         public int IdLoja { get; set; }
-        public string OrigemProduto { get; set; } = "0 - NACIONAL";
-        public string TipoProd { get; set; } = "00 - MERCADORIA PARA REVENDA";
+        public string OrigemProduto { get; set; }
+        public string TipoProd { get; set; }
         public int SitTribCompra { get; set; }
         public decimal IcmsCompra { get; set; }
         public decimal RedBase { get; set; }
@@ -23,11 +23,12 @@
         public string CcsApurada { get; set; }
         public decimal CargaTributariaFederal { get; set; }
         public decimal CargaTributaria { get; set; }
-        public string ChaveNCM { get; set; } = "M2L5P8";
+        public string ChaveNCM { get; set; }
         public string CstIpiSaida { get; set; }
         public string CstIpiEntrada { get; set; }
         public string TipoIva { get; set; } = "P";
         public string CalculaIvaAjustado { get; set; } = "N";
+        public string NatReceita { get; set; } = "";
         public decimal Fecoep { get; set; } = 0;
         public decimal Pis { get; set; } = 0;
         public decimal Cofins { get; set; } = 0;

@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.ckbEanVazioInsereId = new System.Windows.Forms.CheckBox();
-            this.btnSalvar = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.lblDgTributacoes = new System.Windows.Forms.Label();
@@ -64,18 +63,6 @@
             this.ckbEanVazioInsereId.TabIndex = 0;
             this.ckbEanVazioInsereId.Text = "Ean vazio considerar ID do produto";
             this.ckbEanVazioInsereId.UseVisualStyleBackColor = true;
-            // 
-            // btnSalvar
-            // 
-            this.btnSalvar.BackColor = System.Drawing.Color.MediumSeaGreen;
-            this.btnSalvar.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnSalvar.Location = new System.Drawing.Point(1135, 12);
-            this.btnSalvar.Name = "btnSalvar";
-            this.btnSalvar.Size = new System.Drawing.Size(197, 38);
-            this.btnSalvar.TabIndex = 1;
-            this.btnSalvar.Text = "Salvar Alterações";
-            this.btnSalvar.UseVisualStyleBackColor = false;
-            this.btnSalvar.Click += new System.EventHandler(this.btnSalvar_Click);
             // 
             // groupBox1
             // 
@@ -237,7 +224,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.btnSalvar);
             this.Name = "FormParametros";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Configuração de Parâmetros";
@@ -256,7 +242,6 @@
         #endregion
 
         private System.Windows.Forms.CheckBox ckbEanVazioInsereId;
-        private System.Windows.Forms.Button btnSalvar;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label lblDgTributacoes;

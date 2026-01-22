@@ -17,12 +17,11 @@ namespace ImportadorBaratela.Formularios
         {
 
         }
-
-        private void btnSalvar_Click(object sender, EventArgs e)
+        private void FormParametros_FormClosing(object sender, FormClosingEventArgs e)
         {
-            SalvarParametros();
+            if (MessageBox.Show("Deseja salvar as alteções ?", "Atenção", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                SalvarParametros();
         }
-
         void SalvarParametros()
         {
             Parametros = new Parametros
@@ -33,17 +32,6 @@ namespace ImportadorBaratela.Formularios
                 UsuarioMySQL = txtUsuarioMySQL.Text,
                 SenhaMySQL = txtSenhaMySQL.Text
             };
-        }
-
-        private void FormParametros_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (MessageBox.Show("Deseja salvar as alteções ?", "Atenção", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                SalvarParametros();
-        }
-
-        void PreencherTributacaoPadrao()
-        {
-
         }
     }
 }

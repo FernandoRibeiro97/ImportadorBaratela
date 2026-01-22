@@ -80,11 +80,13 @@ namespace ImportadorBaratela.Formularios
             {
                 string[] campos = linha.Split(';');
 
+                int.TryParse(campos[0], out int result);
+
                 if (contLinha == 0)
                 {
                     dtProduto = MontarColunasDataTableCSV(campos);
                 }
-                else if (!string.IsNullOrEmpty(campos[0]) && Convert.ToInt32(campos[0]) > 0)
+                else if (!string.IsNullOrEmpty(campos[0]) && result > 0)
                 {
                     AdicionarLinhaDataTable(dtProduto, campos);
                 }
@@ -244,10 +246,10 @@ namespace ImportadorBaratela.Formularios
             produto.TbEstoque.EstoqueAtual = 0M;
             produto.TbEstoque.EstoqueMinimo = 0M;
 
-
             string natFiscal = r.Cells[13].Value.ToString();
-            decimal aliqEntrada = Convert.ToDecimal(r.Cells[8].Value.ToString());
-            decimal aliqSaida = Convert.ToDecimal(r.Cells[10].Value);
+            decimal.TryParse(r.Cells[8].Value.ToString(), out decimal aliqEntrada);
+            decimal.TryParse(r.Cells[10].Value.ToString(), out decimal aliqSaida);
+
             produto.TbTributacao.IdProduto = produto.TbProduto.IdProduto;
             produto.TbTributacao.IdLoja = _loja;
             produto.TbTributacao.OrigemProduto = "0 - NACIONAL";
@@ -311,6 +313,14 @@ namespace ImportadorBaratela.Formularios
 
             descricao = descricao.Replace("\\", "");
             descricao = descricao.Replace("'", "");
+            descricao = descricao.Replace("~", "");
+            descricao = descricao.Replace("*", "");
+            descricao = descricao.Replace(".", "");
+            descricao = descricao.Replace(",", "");
+            descricao = descricao.Replace("=", "");
+            descricao = descricao.Replace("(", "");
+            descricao = descricao.Replace(")", "");
+            descricao = descricao.Replace("-", "");
 
             return descricao;
         }

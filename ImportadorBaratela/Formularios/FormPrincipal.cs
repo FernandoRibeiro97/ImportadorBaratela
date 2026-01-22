@@ -418,7 +418,6 @@ namespace ImportadorBaratela.Formularios
             produto.TbTributacao.PisEntrada = 0M;
             produto.TbTributacao.CofinsEntrada = 0M;
 
-
             return produto;
         }
         string RetornarDescricaoFormatada(string descricao)

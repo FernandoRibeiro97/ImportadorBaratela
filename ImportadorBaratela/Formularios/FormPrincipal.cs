@@ -1,8 +1,10 @@
-﻿using ImportadorBaratela.Helpers;
+﻿using ImportadorBaratela.Enums;
+using ImportadorBaratela.Helpers;
 using ImportadorBaratela.Models.Config;
 using ImportadorBaratela.Models.Tabelas;
 using ImportadorBaratela.Services;
 using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Relational;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,6 +19,7 @@ namespace ImportadorBaratela.Formularios
     {
         private Parametros _Parametros;
         private MySqlConnection _Conexao;
+        private Dictionary<string, int> _DicionarioColunas;
         public FormPrincipal()
         {
             InitializeComponent();
@@ -109,13 +112,22 @@ namespace ImportadorBaratela.Formularios
         DataTable MontarColunasDataTableCSV(string[] colunas)
         {
             DataTable dt = new DataTable();
+            _DicionarioColunas = new Dictionary<string, int>();
 
             if (colunas.Length > 0)
             {
                 foreach (string coluna in colunas)
                 {
-                    dt.Columns.Add(coluna.Trim());
+                    dt.Columns.Add(coluna.Trim().ToUpper());
                 }
+
+                foreach (DataColumn col in dt.Columns)
+                {
+                    _DicionarioColunas.Add(col.ColumnName, dt.Columns.IndexOf(col));
+                }
+
+                if (!ValidarColunasArquivo(dt.Columns, out string colunaNaoEncontrada))
+                    throw new Exception($"NÃO FOI POSSÍVEL ENCONTRAR A COLUNA {colunaNaoEncontrada}");
             }
             else
             {
@@ -175,8 +187,6 @@ namespace ImportadorBaratela.Formularios
 
         private void btnInserirBanco_Click(object sender, EventArgs e)
         {
-            bool padraoCSV = true;
-
             if (dgProduto.Rows.Count > 0)
             {
                 List<ProdutoCompleto> lstProdutos = new List<ProdutoCompleto>();
@@ -185,10 +195,10 @@ namespace ImportadorBaratela.Formularios
 
                 foreach (DataGridViewRow r in dgProduto.Rows)
                 {
-                    if (padraoCSV)
-                    {
+                    if (RetornarTipoLeituraLinha(dgProduto.Columns) == TipoLeituraLinha.Padrao)
                         lstProdutos.Add(RetornarProdutoPorRowPadrao(r, helperArvoreMercadologica));
-                    }
+                    else
+                        lstProdutos.Add(RetornarProdutoPorNomeColuna(r, helperArvoreMercadologica));
                 }
 
                 ServiceDB serviceDB = new ServiceDB(_Conexao);
@@ -270,6 +280,126 @@ namespace ImportadorBaratela.Formularios
             produto.TbTributacao.Iva = 0M;
 
             string _pisCofins = r.Cells[14].Value.ToString();
+            produto.TbTributacao.TipoPisCofins = _pisCofins == "A" ? "I" : _pisCofins;
+            produto.TbTributacao.CstPis = HelperProduto.RetornarCstPisEntrada(_pisCofins);
+            produto.TbTributacao.CstPisSaida = HelperProduto.RetornarCstPisSaida(_pisCofins);
+            produto.TbTributacao.CcsApurada = "02 - Contribuição não-cumulativa apurada a alíquotas diferenciadas";
+            produto.TbTributacao.CargaTributariaFederal = 0M;
+            produto.TbTributacao.CargaTributaria = 0M;
+            produto.TbTributacao.ChaveNCM = "M2L5P8";
+            produto.TbTributacao.CstIpiSaida = "";
+            produto.TbTributacao.CstIpiEntrada = "";
+            produto.TbTributacao.TipoIva = "P";
+            produto.TbTributacao.CalculaIvaAjustado = "N";
+            produto.TbTributacao.NatReceita = "";
+            produto.TbTributacao.Fecoep = 0M;
+            produto.TbTributacao.Pis = 0M;
+            produto.TbTributacao.Cofins = 0M;
+            produto.TbTributacao.PisEntrada = 0M;
+            produto.TbTributacao.CofinsEntrada = 0M;
+
+            return produto;
+        }
+        ProdutoCompleto RetornarProdutoPorNomeColuna(DataGridViewRow r, HelperArvoreMercadologica helperArvoreMercadologica)
+        {
+            int _loja = 1;
+
+            int idx_idproduto = RetornarIndexColunaPorDescricao("CODIGO");
+            int idx_descricao = RetornarIndexColunaPorDescricao("DESCRICAO");
+            int idx_unidade = RetornarIndexColunaPorDescricao("UNID.");
+            int idx_validade = RetornarIndexColunaPorDescricao("VALIDADE");
+            int idx_secao = RetornarIndexColunaPorDescricao("SECAO");
+            int idx_grupo = RetornarIndexColunaPorDescricao("GRUPO");
+            int idx_subgrupo = RetornarIndexColunaPorDescricao("SUBGRUPO");
+            int idx_pesoVariavel = RetornarIndexColunaPorDescricao("BALANCA");
+            int idx_ean = RetornarIndexColunaPorDescricao("COD.EAN");
+            int idx_classFiscal = RetornarIndexColunaPorDescricao("NCM");
+
+            int idx_custo = RetornarIndexColunaPorDescricao("C.FORN.");
+            int idx_venda = RetornarIndexColunaPorDescricao("VENDA");
+
+            int idx_estoque = RetornarIndexColunaPorDescricao("ESTOQUE");
+
+            int idx_natFiscal = RetornarIndexColunaPorDescricao("NAT.FISCAL");
+            int idx_aliqEntrada = RetornarIndexColunaPorDescricao("ICM COMPRA");
+            int idx_aliqSaida = RetornarIndexColunaPorDescricao("ICM VENDA");
+            int idx_reducao = RetornarIndexColunaPorDescricao("RED VENDA");
+            int idx_pisCofins = RetornarIndexColunaPorDescricao("PIS/COFINS");
+
+            ProdutoCompleto produto = new ProdutoCompleto();
+            produto.TbProduto.IdProduto = Convert.ToInt32(r.Cells[idx_idproduto].Value);
+            produto.TbProduto.Descricao = RetornarDescricaoFormatada(r.Cells[idx_descricao].Value.ToString());
+            produto.TbProduto.DescricaoReduzida = produto.TbProduto.Descricao.Length > 24 ? produto.TbProduto.Descricao.Substring(0, 24) : produto.TbProduto.Descricao;
+            produto.TbProduto.EmbEntrada = 1.000M;
+            produto.TbProduto.EmbSaida = 1.000M;
+            produto.TbProduto.UnidEntrada = idx_unidade > 0 ? r.Cells[idx_unidade].Value.ToString() : "UN";
+            produto.TbProduto.UnidSaida = idx_unidade > 0 ? r.Cells[idx_unidade].Value.ToString() : "UN";
+            produto.TbProduto.Validade = idx_validade > 0 ? Convert.ToInt32(r.Cells[idx_validade].Value) : 0;
+            produto.TbProduto.IdGrupo = helperArvoreMercadologica.GruposInseridos.FirstOrDefault(g => g.Descricao == r.Cells[idx_secao].Value.ToString()).Id;
+            produto.TbProduto.IdSubGrupo = helperArvoreMercadologica.SubGruposInseridos.FirstOrDefault(sb => sb.Descricao == r.Cells[idx_grupo].Value.ToString()).Id;
+            produto.TbProduto.IdSubGrupo1 = helperArvoreMercadologica.SubGrupos1Inseridos.FirstOrDefault(sb1 => sb1.Descricao == r.Cells[idx_subgrupo].Value.ToString()).Id;
+            produto.TbProduto.PesoVariavel = idx_pesoVariavel > 0 ? (r.Cells[idx_pesoVariavel].Value.ToString() == "S" ? 1 : 0) : produto.TbProduto.UnidSaida == "KG" ? 1 : 0;
+            produto.TbProduto.Ean = string.IsNullOrEmpty(r.Cells[idx_ean].Value.ToString()) ? produto.TbProduto.IdProduto.ToString() : r.Cells[idx_ean].Value.ToString();
+            produto.TbProduto.ClassFiscal = string.IsNullOrEmpty(r.Cells[idx_classFiscal].Value.ToString()) ? "12345678" : r.Cells[idx_classFiscal].Value.ToString();
+            produto.TbProduto.Cest = "";
+            produto.TbProduto.Tipo = idx_unidade > 0 ? (r.Cells[idx_unidade].Value.ToString() == "KG" ? "P" : "U") : "U";
+
+            produto.TbPreco.IdProduto = produto.TbProduto.IdProduto;
+            produto.TbPreco.IdLoja = _loja;
+
+            if (idx_custo > 0)
+            {
+                if (decimal.TryParse(r.Cells[idx_custo].Value.ToString(), out decimal _custo))
+                    produto.TbPreco.Custo = _custo;
+                else
+                    produto.TbPreco.Custo = 0m;
+            }
+
+            if (idx_venda > 0)
+            {
+                if (decimal.TryParse(r.Cells[idx_venda].Value.ToString(), out decimal _venda1))
+                    produto.TbPreco.Venda1 = _venda1;
+                else
+                    produto.TbPreco.Venda1 = 0m;
+            }
+
+            produto.TbEstoque.IdProduto = produto.TbProduto.IdProduto;
+            produto.TbEstoque.IdLoja = _loja;
+
+            if (idx_estoque > 0)
+            {
+                if (decimal.TryParse(r.Cells[idx_estoque].Value.ToString(), out decimal _estoque))
+                    produto.TbEstoque.EstoqueAtual = _estoque;
+                else
+                    produto.TbEstoque.EstoqueAtual = 0;
+            }
+
+            produto.TbEstoque.EstoqueMinimo = 0M;
+
+            string natFiscal = r.Cells[idx_natFiscal].Value.ToString();
+            decimal.TryParse(r.Cells[idx_aliqEntrada].Value.ToString(), out decimal aliqEntrada);
+            decimal.TryParse(r.Cells[idx_aliqSaida].Value.ToString(), out decimal aliqSaida);
+
+            bool temReducao = aliqSaida < aliqEntrada;
+            decimal.TryParse(r.Cells[idx_reducao].Value.ToString(), out decimal reducao);
+
+            produto.TbTributacao.IdProduto = produto.TbProduto.IdProduto;
+            produto.TbTributacao.IdLoja = _loja;
+            produto.TbTributacao.OrigemProduto = "0 - NACIONAL";
+            produto.TbTributacao.TipoProd = "00 - MERCADORIA PARA REVENDA";
+            produto.TbTributacao.SitTribCompra = HelperProduto.RetornarSitTrib(natFiscal);
+            produto.TbTributacao.IcmsCompra = HelperProduto.ValidarAliq(aliqEntrada);
+            produto.TbTributacao.RedBase = 0M;
+            produto.TbTributacao.TabIcmsProdEntrada = HelperProduto.RetornarTabIcms(aliqEntrada);
+            produto.TbTributacao.SitTrib = HelperProduto.RetornarSitTrib(natFiscal);
+            produto.TbTributacao.Icms = HelperProduto.ValidarAliq(aliqSaida);
+            produto.TbTributacao.RedBaseVenda = temReducao ? reducao : 0M;
+            produto.TbTributacao.TabIcmsProd = HelperProduto.RetornarTabIcms(aliqSaida, temReducao);
+            produto.TbTributacao.CodTrib = HelperProduto.RetornarCodTrib(natFiscal == "I" ? -1 : aliqSaida);
+            produto.TbTributacao.Ipi = 0M;
+            produto.TbTributacao.Iva = 0M;
+
+            string _pisCofins = r.Cells[idx_pisCofins].Value.ToString();
             produto.TbTributacao.TipoPisCofins = _pisCofins == "A" ? "I" : _pisCofins;
             produto.TbTributacao.CstPis = HelperProduto.RetornarCstPisEntrada(_pisCofins);
             produto.TbTributacao.CstPisSaida = HelperProduto.RetornarCstPisSaida(_pisCofins);
@@ -418,6 +548,57 @@ namespace ImportadorBaratela.Formularios
                 MessageBox.Show("Não foi possível inserir GRUPO/SUBGRUPO/SUBGRUPO1");
                 return false;
             }
+        }
+        int RetornarIndexColunaPorDescricao(string coluna)
+        {
+            if (_DicionarioColunas.Count > 0)
+            {
+                _DicionarioColunas.TryGetValue(coluna, out int index);
+
+                return index;
+            }
+            else
+                return 0;
+        }
+        bool ValidarColunasArquivo(DataColumnCollection colunas, out string colunaNaoEncontrada)
+        {
+            if (!colunas.Contains("CODIGO"))
+            {
+                colunaNaoEncontrada = "CODIGO";
+                return false;
+            }
+
+            if (!colunas.Contains("COD.EAN"))
+            {
+                colunaNaoEncontrada = "COD.EAN";
+                return false;
+            }
+
+            if (!colunas.Contains("DESCRICAO"))
+            {
+                colunaNaoEncontrada = "DESCRICAO";
+                return false;
+            }
+
+            colunaNaoEncontrada = "";
+            return true;
+        }
+        TipoLeituraLinha RetornarTipoLeituraLinha(DataGridViewColumnCollection colunas)
+        {
+            string padraoEsperado = @"CODIGO;COD.EAN;DESCRICAO;UNID.;C.FORN.;C.REP.;VENDA;NCM;ICM COMPRA;RED COMPRA;ICM VENDA;CFOP;RED VENDA;NAT.FISCAL;PIS/COFINS;CST PIS ENT;CST PIS SAI;CST COF ENT;CST COF SAI;% ACRESC.PIS;SECAO;GRUPO;SUBGRUPO;BALANCA;VALIDADE;RECEITA;INF.NUTR;";
+
+            string padraoArquivo = string.Empty;
+
+            foreach (DataGridViewColumn coluna in colunas)
+            {
+                padraoArquivo += coluna.Name + ";";
+            }
+
+            if (padraoArquivo != padraoEsperado)
+                return TipoLeituraLinha.NomeColuna;
+            else
+                return TipoLeituraLinha.Padrao;
+
         }
     }
 }

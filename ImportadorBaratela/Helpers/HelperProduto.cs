@@ -74,7 +74,7 @@ namespace ImportadorBaratela.Helpers
             sb.Append($"'{t.TabIcmsProdEntrada}',");
             sb.Append($"{t.SitTrib},");
             sb.Append($"{FormatarCampoDecimal(t.Icms.ToString())},");
-            sb.Append($"{FormatarCampoDecimal(t.RedBase.ToString())},");
+            sb.Append($"{FormatarCampoDecimal(t.RedBaseVenda.ToString())},");
             sb.Append($"'{t.TabIcmsProd}',");
             sb.Append($"'{t.CodTrib}',");
             sb.Append($"{t.Ipi},");
@@ -119,8 +119,11 @@ namespace ImportadorBaratela.Helpers
                     return 6;
             }
         }
-        public static string RetornarTabIcms(decimal aliq)
+        public static string RetornarTabIcms(decimal aliq, bool reducao = false)
         {
+            if (reducao)
+                return "20 - COM REDUÇÃO DE BASE DE CALCULO";
+
             switch (aliq)
             {
                 case 18:

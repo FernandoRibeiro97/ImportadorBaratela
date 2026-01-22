@@ -249,6 +249,9 @@ namespace ImportadorBaratela.Formularios
             string natFiscal = r.Cells[13].Value.ToString();
             decimal.TryParse(r.Cells[8].Value.ToString(), out decimal aliqEntrada);
             decimal.TryParse(r.Cells[10].Value.ToString(), out decimal aliqSaida);
+            
+            bool temReducao = aliqSaida < aliqEntrada;
+            decimal.TryParse(r.Cells[9].Value.ToString(), out decimal reducao);
 
             produto.TbTributacao.IdProduto = produto.TbProduto.IdProduto;
             produto.TbTributacao.IdLoja = _loja;
@@ -260,8 +263,8 @@ namespace ImportadorBaratela.Formularios
             produto.TbTributacao.TabIcmsProdEntrada = HelperProduto.RetornarTabIcms(aliqEntrada);
             produto.TbTributacao.SitTrib = HelperProduto.RetornarSitTrib(natFiscal);
             produto.TbTributacao.Icms = HelperProduto.ValidarAliq(aliqSaida);
-            produto.TbTributacao.RedBaseVenda = 0M;
-            produto.TbTributacao.TabIcmsProd = HelperProduto.RetornarTabIcms(aliqSaida);
+            produto.TbTributacao.RedBaseVenda = temReducao ? reducao : 0M;
+            produto.TbTributacao.TabIcmsProd = HelperProduto.RetornarTabIcms(aliqSaida, temReducao);
             produto.TbTributacao.CodTrib = HelperProduto.RetornarCodTrib(natFiscal == "I" ? -1 : aliqSaida);
             produto.TbTributacao.Ipi = 0M;
             produto.TbTributacao.Iva = 0M;

@@ -598,7 +598,6 @@ namespace ImportadorBaratela.Formularios
                 return TipoLeituraLinha.NomeColuna;
             else
                 return TipoLeituraLinha.Padrao;
-
         }
     }
 }

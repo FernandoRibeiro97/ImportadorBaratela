@@ -30,11 +30,11 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnImportarArquivoCSV = new System.Windows.Forms.Button();
-            this.dgProduto = new System.Windows.Forms.DataGridView();
+            this.dg = new System.Windows.Forms.DataGridView();
             this.lblQtdLinhas = new System.Windows.Forms.Label();
             this.btnInserirBanco = new System.Windows.Forms.Button();
             this.btnParametros = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dgProduto)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dg)).BeginInit();
             this.SuspendLayout();
             // 
             // btnImportarArquivoCSV
@@ -50,21 +50,21 @@
             this.btnImportarArquivoCSV.UseVisualStyleBackColor = false;
             this.btnImportarArquivoCSV.Click += new System.EventHandler(this.btnImportarArquivoCSV_Click);
             // 
-            // dgProduto
+            // dg
             // 
-            this.dgProduto.AllowUserToAddRows = false;
-            this.dgProduto.AllowUserToDeleteRows = false;
-            this.dgProduto.AllowUserToResizeRows = false;
+            this.dg.AllowUserToAddRows = false;
+            this.dg.AllowUserToDeleteRows = false;
+            this.dg.AllowUserToResizeRows = false;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.Silver;
-            this.dgProduto.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.dgProduto.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgProduto.Location = new System.Drawing.Point(12, 103);
-            this.dgProduto.Name = "dgProduto";
-            this.dgProduto.ReadOnly = true;
-            this.dgProduto.RowHeadersVisible = false;
-            this.dgProduto.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgProduto.Size = new System.Drawing.Size(1320, 614);
-            this.dgProduto.TabIndex = 1;
+            this.dg.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.dg.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dg.Location = new System.Drawing.Point(12, 103);
+            this.dg.Name = "dg";
+            this.dg.ReadOnly = true;
+            this.dg.RowHeadersVisible = false;
+            this.dg.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dg.Size = new System.Drawing.Size(1320, 614);
+            this.dg.TabIndex = 1;
             // 
             // lblQtdLinhas
             // 
@@ -110,13 +110,13 @@
             this.Controls.Add(this.btnParametros);
             this.Controls.Add(this.btnInserirBanco);
             this.Controls.Add(this.lblQtdLinhas);
-            this.Controls.Add(this.dgProduto);
+            this.Controls.Add(this.dg);
             this.Controls.Add(this.btnImportarArquivoCSV);
             this.Name = "FormPrincipal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Importador";
             this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dgProduto)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dg)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -125,7 +125,7 @@
         #endregion
 
         private System.Windows.Forms.Button btnImportarArquivoCSV;
-        private System.Windows.Forms.DataGridView dgProduto;
+        private System.Windows.Forms.DataGridView dg;
         private System.Windows.Forms.Label lblQtdLinhas;
         private System.Windows.Forms.Button btnInserirBanco;
         private System.Windows.Forms.Button btnParametros;

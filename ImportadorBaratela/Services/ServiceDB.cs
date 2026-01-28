@@ -199,6 +199,40 @@ namespace ImportadorBaratela.Services
 
             ExecutarComandoFinal(stringBuilder, "INSERT subgrupo1");
         }
+        public void InserirTabelaCliente(List<Cliente> clientes)
+        {
+            ExecutarComando("TRUNCATE cliente;", CommandType.Text, "TRUNCATE cliente");
+
+            string comando = @"INSERT INTO cliente(
+                    idcliente, nome, fantasia, endereco, numero, bairro, cidade, codmunicipio, uf,
+                    cep, cpf, rg, credito, limite, dt_nasc, usado, obs, empresa_convenio, loja, tipo, tipofidelidade, condicaoPagamento,
+                    fone, celular, email
+                    ) VALUES ";
+
+            StringBuilder stringBuilder = new StringBuilder(comando);
+
+            int contLote = 0;
+
+            foreach (Cliente c in clientes)
+            {
+                stringBuilder.AppendLine(HelperCliente.RetornarLinhaInserirCliente(c) + ",");
+                contLote++;
+
+                if (contLote == 1000)
+                {
+                    ExecutarComandoFinal(stringBuilder, "INSERT cliente");
+                    stringBuilder = new StringBuilder(comando);
+                    contLote = 0;
+                }
+                else
+                    continue;
+            }
+
+            if (contLote > 0)
+            {
+                ExecutarComandoFinal(stringBuilder, "INSERT produto");
+            }
+        }
         public List<Grupo> RetornarGrupos()
         {
             string comando = @"SELECT IDGRUPO, NOME FROM grupo;";

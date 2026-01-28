@@ -101,9 +101,11 @@
       <DependentUpon>FormPrincipal.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\HelperArvoreMercadologica.cs" />
+    <Compile Include="Helpers\HelperCliente.cs" />
     <Compile Include="Helpers\HelperProduto.cs" />
     <Compile Include="Models\Config\Coluna.cs" />
     <Compile Include="Models\Config\Parametros.cs" />
+    <Compile Include="Models\Tabelas\Cliente.cs" />
     <Compile Include="Models\Tabelas\Produto.cs" />
     <Compile Include="Models\Tabelas\ProdutoCompleto.cs" />
     <Compile Include="Models\Tabelas\ProdutoEstoque.cs" />

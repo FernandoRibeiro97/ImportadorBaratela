@@ -20,6 +20,7 @@ namespace ImportadorBaratela.Formularios
         private Parametros _Parametros;
         private MySqlConnection _Conexao;
         private Dictionary<string, int> _DicionarioColunas;
+        private TipoArquivo _TipoArquivo = TipoArquivo.Nenhum;
         public FormPrincipal()
         {
             InitializeComponent();
@@ -49,6 +50,8 @@ namespace ImportadorBaratela.Formularios
 
             if (File.Exists(caminhoArquivo))
             {
+                _TipoArquivo = caminhoArquivo.Contains("CLIENTE.CSV") ? TipoArquivo.Cliente : TipoArquivo.Produto;
+
                 caminhoArquivo = RetornarArquivoCodificadoUTF8(caminhoArquivo);
 
                 if (File.Exists(caminhoArquivo))
@@ -76,7 +79,7 @@ namespace ImportadorBaratela.Formularios
                 return false;
             }
 
-            DataTable dtProduto =  null;
+            DataTable dt =  null;
             int contLinha = 0;
 
             foreach (string linha in linhas)
@@ -87,22 +90,26 @@ namespace ImportadorBaratela.Formularios
 
                 if (contLinha == 0)
                 {
-                    dtProduto = MontarColunasDataTableCSV(campos);
+                    dt = MontarColunasDataTableCSV(campos);
                 }
                 else if (!string.IsNullOrEmpty(campos[0]) && result > 0)
                 {
-                    AdicionarLinhaDataTable(dtProduto, campos);
+                    AdicionarLinhaDataTable(dt, campos);
                 }
 
                 contLinha++;
             }
 
-            if (dtProduto.Rows.Count > 0)
+            if (dt.Rows.Count > 0)
             {
-                InserirArvoreMercadologica(dtProduto, _Conexao);
-                dgProduto.DataSource = dtProduto;
-                lblQtdLinhas.Text = dgProduto.Rows.Count.ToString();
-                btnInserirBanco.Enabled = dgProduto.Rows.Count > 0;
+                if (_TipoArquivo == TipoArquivo.Produto)
+                {
+                    InserirArvoreMercadologica(dt, _Conexao);
+                }
+                
+                dg.DataSource = dt;
+                lblQtdLinhas.Text = dg.Rows.Count.ToString();
+                btnInserirBanco.Enabled = dg.Rows.Count > 0;
                 return true;
             }
             else
@@ -126,7 +133,7 @@ namespace ImportadorBaratela.Formularios
                     _DicionarioColunas.Add(col.ColumnName, dt.Columns.IndexOf(col));
                 }
 
-                if (!ValidarColunasArquivo(dt.Columns, out string colunaNaoEncontrada))
+                if (!ValidarColunasArquivo(dt.Columns, out string colunaNaoEncontrada) && _TipoArquivo == TipoArquivo.Produto)
                     throw new Exception($"NÃO FOI POSSÍVEL ENCONTRAR A COLUNA {colunaNaoEncontrada}");
             }
             else
@@ -187,40 +194,55 @@ namespace ImportadorBaratela.Formularios
 
         private void btnInserirBanco_Click(object sender, EventArgs e)
         {
-            if (dgProduto.Rows.Count > 0)
+            if (dg.Rows.Count > 0)
             {
-                List<ProdutoCompleto> lstProdutos = new List<ProdutoCompleto>();
-                HelperArvoreMercadologica helperArvoreMercadologica = new HelperArvoreMercadologica();
-                helperArvoreMercadologica.PreencherArvoreMercadologicaInserida(_Conexao);
-
-                foreach (DataGridViewRow r in dgProduto.Rows)
-                {
-                    if (RetornarTipoLeituraLinha(dgProduto.Columns) == TipoLeituraLinha.Padrao)
-                        lstProdutos.Add(RetornarProdutoPorRowPadrao(r, helperArvoreMercadologica));
-                    else
-                        lstProdutos.Add(RetornarProdutoPorNomeColuna(r, helperArvoreMercadologica));
-                }
-
                 ServiceDB serviceDB = new ServiceDB(_Conexao);
 
-                List<Produto> lstTabelaProduto = new List<Produto>();
-                List<ProdutoPreco> lstTabelaPreco = new List<ProdutoPreco>();
-                List<ProdutoEstoque> lstTabelaEstoque = new List<ProdutoEstoque>();
-                List<ProdutoTributacao> lstTabelaTributacao = new List<ProdutoTributacao>();
-
-                foreach (ProdutoCompleto p in lstProdutos)
+                if (_TipoArquivo == TipoArquivo.Produto)
                 {
-                    lstTabelaProduto.Add(p.TbProduto);
-                    lstTabelaPreco.Add(p.TbPreco);
-                    lstTabelaEstoque.Add(p.TbEstoque);
-                    lstTabelaTributacao.Add(p.TbTributacao);
-                }
+                    List<ProdutoCompleto> lstProdutos = new List<ProdutoCompleto>();
+                    HelperArvoreMercadologica helperArvoreMercadologica = new HelperArvoreMercadologica();
+                    helperArvoreMercadologica.PreencherArvoreMercadologicaInserida(_Conexao);
 
-                serviceDB.InserirTabelaProduto(lstTabelaProduto);
-                serviceDB.InserirTabelaPreco(lstTabelaPreco);
-                serviceDB.InserirTabelaEstoque(lstTabelaEstoque);
-                serviceDB.InserirTabelaTributacao(lstTabelaTributacao);
-                MessageBox.Show("Operação finalizada");
+                    foreach (DataGridViewRow r in dg.Rows)
+                    {
+                        if (RetornarTipoLeituraLinha(dg.Columns) == TipoLeituraLinha.Padrao)
+                            lstProdutos.Add(RetornarProdutoPorRowPadrao(r, helperArvoreMercadologica));
+                        else
+                            lstProdutos.Add(RetornarProdutoPorNomeColuna(r, helperArvoreMercadologica));
+                    }
+
+                    List<Produto> lstTabelaProduto = new List<Produto>();
+                    List<ProdutoPreco> lstTabelaPreco = new List<ProdutoPreco>();
+                    List<ProdutoEstoque> lstTabelaEstoque = new List<ProdutoEstoque>();
+                    List<ProdutoTributacao> lstTabelaTributacao = new List<ProdutoTributacao>();
+
+                    foreach (ProdutoCompleto p in lstProdutos)
+                    {
+                        lstTabelaProduto.Add(p.TbProduto);
+                        lstTabelaPreco.Add(p.TbPreco);
+                        lstTabelaEstoque.Add(p.TbEstoque);
+                        lstTabelaTributacao.Add(p.TbTributacao);
+                    }
+
+                    serviceDB.InserirTabelaProduto(lstTabelaProduto);
+                    serviceDB.InserirTabelaPreco(lstTabelaPreco);
+                    serviceDB.InserirTabelaEstoque(lstTabelaEstoque);
+                    serviceDB.InserirTabelaTributacao(lstTabelaTributacao);
+                    MessageBox.Show("Operação finalizada");
+                }
+                else if (_TipoArquivo == TipoArquivo.Cliente)
+                {
+                    List<Cliente> lstCliente = new List<Cliente>();
+
+                    foreach (DataGridViewRow r in dg.Rows)
+                    {
+                        lstCliente.Add(RetornarClientePorNomeColuna(r));
+                    }
+
+                    serviceDB.InserirTabelaCliente(lstCliente);
+                    MessageBox.Show("Operação finalizada");
+                }
             }
         }
 
@@ -230,7 +252,7 @@ namespace ImportadorBaratela.Formularios
 
             ProdutoCompleto produto = new ProdutoCompleto();
             produto.TbProduto.IdProduto = Convert.ToInt32(r.Cells[0].Value);
-            produto.TbProduto.Descricao = RetornarDescricaoFormatada(r.Cells[2].Value.ToString());
+            produto.TbProduto.Descricao = RetornarStringFormatada(r.Cells[2].Value.ToString());
             produto.TbProduto.DescricaoReduzida = produto.TbProduto.Descricao.Length > 24 ? produto.TbProduto.Descricao.Substring(0, 24) : produto.TbProduto.Descricao;
             produto.TbProduto.EmbEntrada = 1.000M;
             produto.TbProduto.EmbSaida = 1.000M;
@@ -328,7 +350,7 @@ namespace ImportadorBaratela.Formularios
 
             ProdutoCompleto produto = new ProdutoCompleto();
             produto.TbProduto.IdProduto = Convert.ToInt32(r.Cells[idx_idproduto].Value);
-            produto.TbProduto.Descricao = RetornarDescricaoFormatada(r.Cells[idx_descricao].Value.ToString());
+            produto.TbProduto.Descricao = RetornarStringFormatada(r.Cells[idx_descricao].Value.ToString());
             produto.TbProduto.DescricaoReduzida = produto.TbProduto.Descricao.Length > 24 ? produto.TbProduto.Descricao.Substring(0, 24) : produto.TbProduto.Descricao;
             produto.TbProduto.EmbEntrada = 1.000M;
             produto.TbProduto.EmbSaida = 1.000M;
@@ -420,42 +442,90 @@ namespace ImportadorBaratela.Formularios
 
             return produto;
         }
-        string RetornarDescricaoFormatada(string descricao)
+        Cliente RetornarClientePorNomeColuna(DataGridViewRow r)
         {
-            descricao = descricao.Replace("Á", "A");
-            descricao = descricao.Replace("À", "A");
-            descricao = descricao.Replace("Â", "A");
-            descricao = descricao.Replace("Ã", "A");
+            int idx_idcliente = RetornarIndexColunaPorDescricao("CODIGO");
+            int idx_nome = RetornarIndexColunaPorDescricao("NOME");
+            int idx_endereco = RetornarIndexColunaPorDescricao("ENDERECO");
+            int idx_bairro = RetornarIndexColunaPorDescricao("BAIRRO");
+            int idx_cidade = RetornarIndexColunaPorDescricao("CIDADE");
+            int idx_cep = RetornarIndexColunaPorDescricao("CEP");
+            int idx_uf = RetornarIndexColunaPorDescricao("UF");
+            int idx_aniversario = RetornarIndexColunaPorDescricao("ANIVERSARIO");
+            int idx_cpf = RetornarIndexColunaPorDescricao("CPF");
+            int idx_rg = RetornarIndexColunaPorDescricao("RG");
+            int idx_email = RetornarIndexColunaPorDescricao("EMAIL");
+            int idx_celular = RetornarIndexColunaPorDescricao("CELULAR");
+            
+            Cliente cliente = new Cliente();
+            cliente.Id = Convert.ToInt32(r.Cells[idx_idcliente].Value);
+            cliente.Nome = RetornarStringFormatada(r.Cells[idx_nome].Value.ToString());
+            cliente.Fantasia = cliente.Nome;
+            cliente.Endereco = RetornarStringFormatada(r.Cells[idx_endereco].Value.ToString(), false).Replace("\\", "").Replace("'", "");
+            cliente.Numero = RetornarNumeroEndereco(cliente.Endereco);
+            cliente.Bairro = r.Cells[idx_bairro].Value.ToString();
+            cliente.Cidade = RetornarStringFormatada(r.Cells[idx_cidade].Value.ToString());
+            cliente.CodMunicipio = 0;
+            cliente.UF = r.Cells[idx_uf].Value.ToString();
+            cliente.CEP = r.Cells[idx_cep].Value.ToString();
+            cliente.CPF = r.Cells[idx_cpf].Value.ToString();
+            cliente.RG = r.Cells[idx_rg].Value.ToString();
+            cliente.Credito = 0;
+            cliente.Limite = 0;
+            cliente.DtNascimento = "2000-01-01";
+            cliente.Usado = 0;
+            cliente.Obs = "IMPORTADO";
+            cliente.EmpresaConvenio = 1;
+            cliente.Loja = 1;
+            cliente.Tipo = "TT";
+            cliente.TipoFidelidade = 2;
+            cliente.CondicaoPagamento = "";
+            cliente.Fone = "";
+            cliente.Celular = r.Cells[idx_celular].Value.ToString();
+            cliente.Email = r.Cells[idx_email].Value.ToString();
 
-            descricao = descricao.Replace("É", "E");
-            descricao = descricao.Replace("È", "E");
-            descricao = descricao.Replace("Ê", "E");
+            return cliente;
+        }
+        string RetornarStringFormatada(string str, bool removerCaracteresEspeciais = true)
+        {
+            str = str.Replace("Á", "A");
+            str = str.Replace("À", "A");
+            str = str.Replace("Â", "A");
+            str = str.Replace("Ã", "A");
 
-            descricao = descricao.Replace("Í", "I");
-            descricao = descricao.Replace("Ì", "I");
+            str = str.Replace("É", "E");
+            str = str.Replace("È", "E");
+            str = str.Replace("Ê", "E");
 
-            descricao = descricao.Replace("Ó", "O");
-            descricao = descricao.Replace("Ò", "O");
-            descricao = descricao.Replace("Ô", "O");
-            descricao = descricao.Replace("Õ", "O");
+            str = str.Replace("Í", "I");
+            str = str.Replace("Ì", "I");
 
-            descricao = descricao.Replace("Ú", "U");
-            descricao = descricao.Replace("Ù", "U");
+            str = str.Replace("Ó", "O");
+            str = str.Replace("Ò", "O");
+            str = str.Replace("Ô", "O");
+            str = str.Replace("Õ", "O");
 
-            descricao = descricao.Replace("Ç", "C");
+            str = str.Replace("Ú", "U");
+            str = str.Replace("Ù", "U");
 
-            descricao = descricao.Replace("\\", "");
-            descricao = descricao.Replace("'", "");
-            descricao = descricao.Replace("~", "");
-            descricao = descricao.Replace("*", "");
-            descricao = descricao.Replace(".", "");
-            descricao = descricao.Replace(",", "");
-            descricao = descricao.Replace("=", "");
-            descricao = descricao.Replace("(", "");
-            descricao = descricao.Replace(")", "");
-            descricao = descricao.Replace("-", "");
+            str = str.Replace("Ç", "C");
 
-            return descricao;
+            if (removerCaracteresEspeciais)
+            {
+                str = str.Replace("\\", "");
+                str = str.Replace("'", "");
+                str = str.Replace("~", "");
+                str = str.Replace("*", "");
+                str = str.Replace(".", "");
+                str = str.Replace(",", "");
+                str = str.Replace("=", "");
+                str = str.Replace("(", "");
+                str = str.Replace(")", "");
+                str = str.Replace("-", "");
+                str = str.Replace(";", "");
+            }
+
+            return str;
         }
         string RetornarArquivoCodificadoUTF8(string arquivoOriginal)
         {
@@ -559,6 +629,66 @@ namespace ImportadorBaratela.Formularios
             }
             else
                 return 0;
+        }
+        string RetornarNumeroEndereco(string endereco)
+        {
+            if (endereco == "N")
+                return "SN";
+
+            var x = 0;
+
+            if (endereco.Contains(","))
+            {
+                string[] retorno = endereco.Split(',');
+
+                if (retorno.Count() > 1)
+                {
+                    if (retorno[1].Contains(' '))
+                    {
+                        string[] novoRetorno = retorno[1].Split(' ');
+
+                        for (int i = 0; i < novoRetorno.Length; i++)
+                        {
+                            int.TryParse(novoRetorno[i], out int result);
+
+                            //RETORNA O PRIMEIRO QUE CONSEGUIR CONVERTER
+                            if (result > 0)
+                                return result.ToString();
+                        }
+                    }
+                    else
+                        return retorno[1].Trim();
+                }
+            }
+            else if (endereco.Contains("N "))
+            {
+                int i = endereco.IndexOf("N ");
+
+                var extrair = endereco.Substring(i);
+                string[] retorno = extrair.Split(' ');
+
+                if (retorno.Count() > 1)
+                {
+                    int.TryParse(retorno[1], out int result);
+
+                    if (result > 0)
+                        return retorno[1].Trim();
+                }
+            }
+            else if (endereco.Contains("N."))
+            {
+                string[] retorno = endereco.Split('.');
+
+                if (retorno.Count() > 1)
+                {
+                    int.TryParse(retorno[1], out int result);
+
+                    if (result > 0)
+                        return retorno[1].Trim();
+                }
+            }
+
+            return "SN";
         }
         bool ValidarColunasArquivo(DataColumnCollection colunas, out string colunaNaoEncontrada)
         {

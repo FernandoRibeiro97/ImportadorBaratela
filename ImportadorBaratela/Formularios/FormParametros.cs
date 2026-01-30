@@ -7,6 +7,7 @@ namespace ImportadorBaratela.Formularios
     public partial class FormParametros : Form
     {
         public Parametros Parametros;
+        private bool Salvou = false;
         public FormParametros()
         {
             Parametros Parametros;
@@ -19,8 +20,8 @@ namespace ImportadorBaratela.Formularios
         }
         private void FormParametros_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (MessageBox.Show("Deseja salvar as alteções ?", "Atenção", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                SalvarParametros();
+            if (!Salvou)
+                btnSalvar.PerformClick();
         }
         void SalvarParametros()
         {
@@ -32,6 +33,14 @@ namespace ImportadorBaratela.Formularios
                 UsuarioMySQL = txtUsuarioMySQL.Text,
                 SenhaMySQL = txtSenhaMySQL.Text
             };
+
+            Salvou = true;
+        }
+
+        private void btnSalvar_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Deseja salvar as alteções ?", "Atenção", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                SalvarParametros();
         }
     }
 }

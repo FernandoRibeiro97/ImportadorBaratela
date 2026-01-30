@@ -32,7 +32,7 @@ namespace ImportadorBaratela.Formularios
         }
         private void btnImportarArquivoCSV_Click(object sender, EventArgs e)
         {
-            lblQtdLinhas.Text = "---";
+            LimparTela();
             string caminhoArquivo = string.Empty;
 
             using (OpenFileDialog ofd = new OpenFileDialog())
@@ -728,6 +728,13 @@ namespace ImportadorBaratela.Formularios
                 return TipoLeituraLinha.NomeColuna;
             else
                 return TipoLeituraLinha.Padrao;
+        }
+        void LimparTela()
+        {
+            _DicionarioColunas = new Dictionary<string, int>();
+            _TipoArquivo = TipoArquivo.Nenhum;
+            dg.DataSource = null;
+            lblQtdLinhas.Text = "---";
         }
     }
 }

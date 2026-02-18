@@ -29,7 +29,8 @@ namespace ImportadorBaratela.Helpers
             sb.Append($"'{p.ClassFiscal}',");
             sb.Append($"'{p.Cest}',");
             sb.Append($"{p.Vasilhame},");
-            sb.Append($"'{p.Tipo}'");
+            sb.Append($"'{p.Tipo}',");
+            sb.Append($"{p.IdFamilia}");
 
             sb.Append(")");
             return sb.ToString();

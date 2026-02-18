@@ -27,7 +27,7 @@ namespace ImportadorBaratela.Services
         {
             ExecutarComando("TRUNCATE produto;", CommandType.Text, "TRUNCATE produto");
 
-            string comando = @"INSERT INTO produto(idproduto, Descricao, DescrRed, EmbEntra, EmbSaida, UnidEntra, UnidSaida, Obs, Validade, idGrupo, idSubGrupo, idSubGrupo1, idSituacao, DtCadastro, PesoVariavel, Etiqueta, Ean, ClassFiscal, cest, Vasilhame, Tipo) 
+            string comando = @"INSERT INTO produto(idproduto, Descricao, DescrRed, EmbEntra, EmbSaida, UnidEntra, UnidSaida, Obs, Validade, idGrupo, idSubGrupo, idSubGrupo1, idSituacao, DtCadastro, PesoVariavel, Etiqueta, Ean, ClassFiscal, cest, Vasilhame, Tipo, IdFamilia) 
               VALUES ";
 
             StringBuilder stringBuilder = new StringBuilder(comando);

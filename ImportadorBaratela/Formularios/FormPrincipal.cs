@@ -336,6 +336,7 @@ namespace ImportadorBaratela.Formularios
             int idx_pesoVariavel = RetornarIndexColunaPorDescricao("BALANCA");
             int idx_ean = RetornarIndexColunaPorDescricao("COD.EAN");
             int idx_classFiscal = RetornarIndexColunaPorDescricao("NCM");
+            int idx_idfamilia = RetornarIndexColunaPorDescricao("FAMILIA");
 
             int idx_custo = RetornarIndexColunaPorDescricao("C.FORN.");
             int idx_venda = RetornarIndexColunaPorDescricao("VENDA");
@@ -365,9 +366,11 @@ namespace ImportadorBaratela.Formularios
             produto.TbProduto.ClassFiscal = string.IsNullOrEmpty(r.Cells[idx_classFiscal].Value.ToString()) ? "12345678" : r.Cells[idx_classFiscal].Value.ToString();
             produto.TbProduto.Cest = "";
             produto.TbProduto.Tipo = idx_unidade > 0 ? (r.Cells[idx_unidade].Value.ToString() == "KG" ? "P" : "U") : "U";
+            produto.TbProduto.IdFamilia = idx_idfamilia > 0 ? Convert.ToInt32(r.Cells[idx_idfamilia].Value) : 0;
 
             produto.TbPreco.IdProduto = produto.TbProduto.IdProduto;
             produto.TbPreco.IdLoja = _loja;
+            produto.TbPreco.IdFamilia = produto.TbProduto.IdFamilia;
 
             if (idx_custo > 0)
             {

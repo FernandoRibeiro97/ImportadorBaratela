@@ -115,7 +115,6 @@ namespace ImportadorBaratela.Formularios
             else
                 return false;
         }
-
         DataTable MontarColunasDataTableCSV(string[] colunas)
         {
             DataTable dt = new DataTable();
@@ -164,7 +163,7 @@ namespace ImportadorBaratela.Formularios
 
             return retorno;
         }
-
+        
         private void btnParametros_Click(object sender, EventArgs e)
         {
             using (FormParametros _form = new FormParametros())
@@ -191,7 +190,6 @@ namespace ImportadorBaratela.Formularios
                 }
             }
         }
-
         private void btnInserirBanco_Click(object sender, EventArgs e)
         {
             if (dg.Rows.Count > 0)

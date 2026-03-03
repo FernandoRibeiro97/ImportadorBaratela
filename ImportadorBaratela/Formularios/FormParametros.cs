@@ -40,7 +40,10 @@ namespace ImportadorBaratela.Formularios
         private void btnSalvar_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Deseja salvar as alteções ?", "Atenção", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
                 SalvarParametros();
+                Close();
+            }
         }
     }
 }

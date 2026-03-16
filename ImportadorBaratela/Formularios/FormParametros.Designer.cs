@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.ckbEanVazioInsereId = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -48,6 +49,11 @@
             this.txtSenhaMySQL = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.btnSalvar = new System.Windows.Forms.Button();
+            this.txtNomeArquivoCliente = new System.Windows.Forms.TextBox();
+            this.txtNomeArquivoProduto = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgTributacoes)).BeginInit();
@@ -223,11 +229,51 @@
             this.btnSalvar.UseVisualStyleBackColor = false;
             this.btnSalvar.Click += new System.EventHandler(this.btnSalvar_Click);
             // 
+            // txtNomeArquivoCliente
+            // 
+            this.txtNomeArquivoCliente.Location = new System.Drawing.Point(487, 41);
+            this.txtNomeArquivoCliente.Name = "txtNomeArquivoCliente";
+            this.txtNomeArquivoCliente.Size = new System.Drawing.Size(244, 20);
+            this.txtNomeArquivoCliente.TabIndex = 16;
+            this.txtNomeArquivoCliente.Text = "CLIENTE.CSV";
+            this.toolTip.SetToolTip(this.txtNomeArquivoCliente, "Para o sistema não importa se o arquivo está maiúsculo e minúsculo");
+            // 
+            // txtNomeArquivoProduto
+            // 
+            this.txtNomeArquivoProduto.Location = new System.Drawing.Point(487, 12);
+            this.txtNomeArquivoProduto.Name = "txtNomeArquivoProduto";
+            this.txtNomeArquivoProduto.Size = new System.Drawing.Size(244, 20);
+            this.txtNomeArquivoProduto.TabIndex = 14;
+            this.txtNomeArquivoProduto.Text = "PRODUTO.CSV";
+            this.toolTip.SetToolTip(this.txtNomeArquivoProduto, "Para o sistema não importa se o arquivo está maiúsculo e minúsculo");
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(368, 15);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(113, 13);
+            this.label6.TabIndex = 13;
+            this.label6.Text = "Nome arquivo Produto";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(368, 45);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(108, 13);
+            this.label7.TabIndex = 17;
+            this.label7.Text = "Nome arquivo Cliente";
+            // 
             // FormParametros
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1344, 729);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.txtNomeArquivoCliente);
+            this.Controls.Add(this.txtNomeArquivoProduto);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.btnSalvar);
             this.Controls.Add(this.txtSenhaMySQL);
             this.Controls.Add(this.label4);
@@ -276,5 +322,10 @@
         private System.Windows.Forms.TextBox txtSenhaMySQL;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnSalvar;
+        private System.Windows.Forms.TextBox txtNomeArquivoCliente;
+        private System.Windows.Forms.TextBox txtNomeArquivoProduto;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

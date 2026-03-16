@@ -7,5 +7,7 @@
         public string BancoMySQL { get; set; }
         public string UsuarioMySQL { get; set; }
         public string SenhaMySQL { get; set; }
+        public string NomeArquivoProduto { get; set; }
+        public string NomeArquivoCliente { get; set; }
     }
 }

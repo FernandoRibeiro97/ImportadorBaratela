@@ -34,13 +34,17 @@ namespace ImportadorBaratela.Formularios
         {
             LimparTela();
             string caminhoArquivo = string.Empty;
+            string nomeArquivo = string.Empty;
 
             using (OpenFileDialog ofd = new OpenFileDialog())
             {
                 ofd.Filter = "arquivos csv (*.csv)|*.csv";
 
                 if (ofd.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(ofd.FileName))
+                {
                     caminhoArquivo = ofd.FileName;
+                    nomeArquivo = ofd.SafeFileName;
+                }
                 else
                 {
                     MessageBox.Show("Nenhum arquivo selecionado");
@@ -50,7 +54,13 @@ namespace ImportadorBaratela.Formularios
 
             if (File.Exists(caminhoArquivo))
             {
-                _TipoArquivo = caminhoArquivo.Contains("CLIENTE.CSV") ? TipoArquivo.Cliente : TipoArquivo.Produto;
+                _TipoArquivo = nomeArquivo.ToUpper() == _Parametros.NomeArquivoCliente.ToUpper() ? TipoArquivo.Cliente : nomeArquivo.ToUpper() == _Parametros.NomeArquivoProduto.ToUpper() ? TipoArquivo.Produto : TipoArquivo.Nenhum;
+
+                if (_TipoArquivo == TipoArquivo.Nenhum)
+                {
+                    MessageBox.Show("Não foi possível ler o arquivo, verifique se o nome do arquivo é o mesmo da configuração na tela de parâmetros");
+                    return;
+                }
 
                 caminhoArquivo = RetornarArquivoCodificadoUTF8(caminhoArquivo);
 

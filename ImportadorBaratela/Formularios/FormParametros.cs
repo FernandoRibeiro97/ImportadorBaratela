@@ -31,7 +31,9 @@ namespace ImportadorBaratela.Formularios
                 ServidorMySQL = txtServidorMySQL.Text,
                 BancoMySQL = txtBancoMySQL.Text,
                 UsuarioMySQL = txtUsuarioMySQL.Text,
-                SenhaMySQL = txtSenhaMySQL.Text
+                SenhaMySQL = txtSenhaMySQL.Text,
+                NomeArquivoProduto = txtNomeArquivoProduto.Text,
+                NomeArquivoCliente = txtNomeArquivoCliente.Text
             };
 
             Salvou = true;

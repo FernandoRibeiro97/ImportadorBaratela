@@ -76,7 +76,7 @@
             this.groupBox1.Controls.Add(this.ckbEanVazioInsereId);
             this.groupBox1.Location = new System.Drawing.Point(12, 127);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1320, 184);
+            this.groupBox1.Size = new System.Drawing.Size(719, 96);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Fixos";
@@ -86,9 +86,9 @@
             this.groupBox2.Controls.Add(this.lblDgTributacoes);
             this.groupBox2.Controls.Add(this.dgTributacoes);
             this.groupBox2.Enabled = false;
-            this.groupBox2.Location = new System.Drawing.Point(12, 326);
+            this.groupBox2.Location = new System.Drawing.Point(12, 229);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(1320, 281);
+            this.groupBox2.Size = new System.Drawing.Size(719, 190);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Condicionais";
@@ -221,7 +221,7 @@
             this.btnSalvar.BackColor = System.Drawing.Color.MediumSeaGreen;
             this.btnSalvar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSalvar.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnSalvar.Location = new System.Drawing.Point(1135, 12);
+            this.btnSalvar.Location = new System.Drawing.Point(534, 80);
             this.btnSalvar.Name = "btnSalvar";
             this.btnSalvar.Size = new System.Drawing.Size(197, 38);
             this.btnSalvar.TabIndex = 12;
@@ -269,7 +269,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1344, 729);
+            this.ClientSize = new System.Drawing.Size(739, 432);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.txtNomeArquivoCliente);
             this.Controls.Add(this.txtNomeArquivoProduto);
